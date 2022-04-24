@@ -36,12 +36,8 @@ know the ins and outs of working collaboratively on GitHub.
 
 You can use the features of this library in two ways:
 
-- As a local ToolBox
+- As a local ToolBox (simply download and install [`MFTyreLibrary.mltbx`](./MFTyreLibrary.mltbx))
 - As a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
-
-To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
-This is better if this project ought to be part of a larger Git-based project.
-You could then add it as a Git Submodule.
 
 To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
 This is better if this project ought to be part of a larger Git-based project.
