@@ -1,14 +1,36 @@
 # MF-Tyre MATLAB Library
 
+```matlab
+[Fx,Fy] = mftyre.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
+```
+
 This repository contains easy-to-use functions and classes to:
 
 - Represent MFTyre models in a OOP-way
-  (helpful in developing GUI-applications).
-- Evaluate MFTyre parameter sets
-  (useful for any use-case where tyre forces need to be calculated).
-- Import tyre data and represent and export it in TYDEX format
-  (useful to export tyre data in Siemens MF-Tool readable format).
+- Evaluate MFTyre parameter sets to calculate Tyre Forces (FX,FY)
+- Read and Store tyre models in TIR files (Tyre Property File).
+  Useful especially for exporting tyre models to Siemens Multibody or similar.
+- Import and export tyre data using the TYDEX format.
+  Useful to export tyre data in Siemens MF-Tool readable format.
 - Fit MFTyre models to tyre data (curve-fitting).
+
+The project was motivated by my work in the Formula Student Team
+[UPBracing](https://formulastudent.uni-paderborn.de/en/). As I required
+a performant, easy-to-use and precise implementation of the Magic Formula,
+and existing implementations were not satisfactory (either being commercialized
+and therefore without source or [very slow](https://de.mathworks.com/matlabcentral/fileexchange/63618-mfeval)),
+it made sense to make my own version.
+
+This library is currently used in the team's Torque-Vectoring
+algorithms and all vehicle-modeling applications. Therefore the model
+evaluation functions are suitable for code-generation and have actually
+proven to be only moderately slower than linear tire models.
+
+I hope this project benefits some students passionate about Vehicle Dynaimcs.
+If you have any questions, don't hesitate to contact me! I will try and keep this
+project updated in the future. If you want to contribute, please do. But I
+must warn you, I am still new to publishing code as open-source and do not yet
+know the ins and outs of working collaboratively on GitHub.
 
 ## Installation
 
@@ -17,8 +39,9 @@ You can use the features of this library in two ways:
 - As a local ToolBox
 - As a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
 
-To use as a toolbox, simply download the file `MFTyreLibrary.mltbx` and
-follow the instructions. This is the quickest and most user-friendly way to get started.
+To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
+This is better if this project ought to be part of a larger Git-based project.
+You could then add it as a Git Submodule.
 
 To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
 This is better if this project ought to be part of a larger Git-based project.
