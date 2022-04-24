@@ -47,7 +47,7 @@ You could then add it as a Git Submodule.
 
 ## Usage and Examples
 
-For interactie examples and usage instructions, open the MATLAB live script
+For interactive examples and usage instructions, open the MATLAB live script
 [`doc/GettingStarted.mlx`](./doc/GettingStarted.mlx) in your editor.
 
 ## Known Issues, Notes and Bugs
