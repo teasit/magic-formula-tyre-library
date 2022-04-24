@@ -1,5 +1,7 @@
 # MF-Tyre MATLAB Library
 
+![Social Preview Image](./doc/images/tyre_icon_socialpreview.png)
+
 ```matlab
 [Fx,Fy] = mftyre.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
 ```
