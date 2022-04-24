@@ -1,0 +1,8 @@
+Exporter made by Tom Teasdale 2022
+
+TYDEX standard was implemented according to:
+    TYDEX-format: Description and Reference Manual. Release 1.3
+    Dipl.-Ing. H.-J. Unrau, Universität Karlsruhe (TH)
+    Dr.-Ing. J. Zamow, Dr.Ing.h.c.F.Porsche AG
+    09.01.1997
+    https://www.fast.kit.edu/download/DownloadsFahrzeugtechnik/TY100531_TYDEX_V1_3.pdf

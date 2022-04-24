@@ -1,0 +1,99 @@
+classdef FSAETTC_SI_ISO_Mat_DriveBrake < tydex.parsers.FSAETTC_SI_ISO_Mat
+    methods (Access = public)
+        function [measurements, bins, binvalues] = parse(obj,file)
+            arguments
+                obj
+                file char {mustBeFile}
+            end
+            import tydex.ConstantParameter
+            import tydex.MeasuredParameter
+            import tydex.Measurement
+            import tydex.Metadata
+            
+            data = load(file);
+            [~,fileName] = fileparts(file);
+            
+            [counts.FZW,     edges.FZW]      = histcounts(data.FZ);
+            [counts.INFLPRES,edges.INFLPRES] = histcounts(data.P);
+            [counts.INCLANGL,edges.INCLANGL] = histcounts(data.IA);
+            [counts.SLIPANGL,edges.SLIPANGL] = histcounts(data.SA);
+            
+            [~, locs.FZW]       = findpeaks([counts.FZW(2)      counts.FZW counts.FZW(end-1)],              'MinPeakHeight', 500);
+            [~, locs.INFLPRES]  = findpeaks([counts.INFLPRES(2) counts.INFLPRES counts.INFLPRES(end-1)],    'MinPeakHeight', 1000);
+            [~, locs.INCLANGL]  = findpeaks([counts.INCLANGL(2) counts.INCLANGL counts.INCLANGL(end-1)],    'MinPeakHeight', 1000);
+            [~, locs.SLIPANGL]  = findpeaks([counts.SLIPANGL(2) counts.SLIPANGL counts.SLIPANGL(end-1)],    'MinPeakHeight', 1000);
+            
+            binvalues.FZW       = unique(round(abs(edges.FZW(locs.FZW))));
+            binvalues.INFLPRES  = unique(round(abs(edges.INFLPRES(locs.INFLPRES))));
+            binvalues.INCLANGL  = unique(round(abs(edges.INCLANGL(locs.INCLANGL))));
+            binvalues.SLIPANGL  = unique(round(abs(edges.SLIPANGL(locs.SLIPANGL))));
+            
+            eps = obj.SteadyStateTolerances;
+            bins.FZW      = abs(data.FZ)     >(binvalues.FZW-eps.FZW)            &   abs(data.FZ)    <(binvalues.FZW+eps.FZW);
+            bins.INCLANGL = abs(data.IA)     >(binvalues.INCLANGL-eps.INCLANGL)  &   abs(data.IA)    <(binvalues.INCLANGL+eps.INCLANGL);
+            bins.SLIPANGL = abs(data.SA)     >(binvalues.SLIPANGL-eps.SLIPANGL)  &   abs(data.SA)    <(binvalues.SLIPANGL+eps.SLIPANGL);
+            bins.INFLPRES = abs(data.P)      >(binvalues.INFLPRES-eps.INFLPRES)  &   abs(data.P)     <(binvalues.INFLPRES+eps.INFLPRES);
+            
+            measurements(length(binvalues.FZW)...
+                *length(binvalues.INCLANGL)...
+                *length(binvalues.SLIPANGL)...
+                *length(binvalues.INFLPRES))...
+                = Measurement();
+            
+            num = 1;
+            for i1 = 1:length(binvalues.FZW)
+                for i2 = 1:length(binvalues.INCLANGL)
+                    for i3 = 1:length(binvalues.SLIPANGL)
+                        for i4 = 1:length(binvalues.INFLPRES)
+                            idx = ...
+                                bins.FZW(:,i1)       &...
+                                bins.INCLANGL(:,i2)  &...
+                                bins.SLIPANGL(:,i3)  &...
+                                bins.INFLPRES(:,i4);
+                            
+                            LONGVEL     = MeasuredParameter('LONGVEL',  'km/h',  data.V(idx));
+                            WHROTSPD    = MeasuredParameter('WHROTSPD', 'rad/s', data.N(idx)*2*pi);
+                            FX          = MeasuredParameter('FX',       'N',     data.FX(idx));
+                            FYW         = MeasuredParameter('FYW',      'N',     data.FY(idx));
+                            MXW         = MeasuredParameter('MXW',      'Nm',    data.MX(idx));
+                            MZW         = MeasuredParameter('MZW',      'Nm',    data.MZ(idx));
+                            RUNTIME     = MeasuredParameter('RUNTIME',  's',     data.ET(idx));
+                            LONGSLIP    = MeasuredParameter('LONGSLIP', '-',     data.SL(idx));
+                            SLIPANGL    = MeasuredParameter('SLIPANGL', 'deg',   data.SA(idx));
+                            INCLANGL    = MeasuredParameter('INCLANGL', 'deg',   data.IA(idx));
+                            INFLPRES    = MeasuredParameter('INFLPRES', 'kPa',   data.P(idx));
+                            FZW         = MeasuredParameter('FZW',      'N',     data.FZ(idx));
+                            measurements(num).Measured = [
+                                LONGVEL RUNTIME INFLPRES WHROTSPD LONGSLIP FX FYW FZW MXW MZW SLIPANGL INCLANGL
+                                ];
+                            
+                            FZW         = ConstantParameter('FZW',      'N',    binvalues.FZW(i1));
+                            INCLANGL    = ConstantParameter('INCLANGL', 'deg',  binvalues.INCLANGL(i2));
+                            INFLPRES    = ConstantParameter('INFLPRES', 'kPa',  binvalues.INFLPRES(i4));
+                            SLIPANGL    = ConstantParameter('SLIPANGL', 'deg',  binvalues.SLIPANGL(i3));
+                            FNOMIN      = ConstantParameter('FNOMIN',   'N',    binvalues.FZW(end));
+                            NOMPRES     = ConstantParameter('NOMPRES',  'kPa',  binvalues.INFLPRES(end));
+                            measurements(num).Constant = [
+                                FZW INCLANGL INFLPRES SLIPANGL FNOMIN NOMPRES
+                                ];
+                            
+                            RELEASE  = Metadata('RELEASE','1.3');
+                            MEASID   = Metadata('MEASID', fileName);
+                            SUPPLIER = Metadata('SUPPLIER','FSAE TTC');
+                            
+                            
+                            measurements(num).Metadata = [
+                                RELEASE
+                                MEASID
+                                SUPPLIER
+                                ];
+                            
+                            num = num+1;
+                        end
+                    end
+                end
+            end
+            measurements = obj.fixUnits(measurements);
+        end
+    end
+end
