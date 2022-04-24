@@ -28,7 +28,7 @@ algorithms and all vehicle-modeling applications. Therefore the model
 evaluation functions are suitable for code-generation and have actually
 proven to be only moderately slower than linear tire models.
 
-I hope this project benefits some students passionate about Vehicle Dynaimcs.
+I hope this project benefits some students passionate about Vehicle Dynamics.
 If you have any questions, don't hesitate to contact me! I will try and keep this
 project updated in the future. If you want to contribute, please do. But I
 must warn you, I am still new to publishing code as open-source and do not yet
@@ -44,6 +44,11 @@ You can use the features of this library in two ways:
 To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
 This is better if this project ought to be part of a larger Git-based project.
 You could then add it as a Git Submodule.
+
+## Usage and Examples
+
+For interactie examples and usage instructions, open the MATLAB live script
+[`doc/GettingStarted.mlx`](./doc/GettingStarted.mlx) in your editor.
 
 ## Known Issues, Notes and Bugs
 
