@@ -13,6 +13,7 @@ import('mftyre.v62.equations.Fx')
 import('mftyre.v62.equations.Fy')
 
 params = appendFitted(params,x,fitmode);
+params = struct(params);
 
 switch fitmode
     case FitMode.Fx0
