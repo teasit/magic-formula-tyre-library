@@ -22,14 +22,12 @@ classdef Model < mftyre.Model
             };
     end
     methods
-        function mdl = Model(version, description)
-            if ~exist('version','var')
-                version = 62;
+        function mdl = Model(description)
+            arguments
+                description string = string.empty
             end
-            if exist('description','var')
-                mdl.Description = description;
-            end
-            mdl.Parameters = mftyre.v62.Parameters(version);
+            mdl.Description = description;
+            mdl.Parameters = mftyre.v62.Parameters();
         end
         
         function value = get.Version(mdl)

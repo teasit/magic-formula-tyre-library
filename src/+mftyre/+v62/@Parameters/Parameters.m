@@ -1,6 +1,12 @@
 classdef Parameters
-    % PARAMETERS
-% https://functionbay.com/documentation/onlinehelp/Documents/Tire/MFTyre-MFSwift_Help.pdf
+    %PARAMETERS MFTyre 6.1.2 parameter set.
+    % Parameter names implemented according to MF-Tyre/MF-Swift manual:
+    %   https://functionbay.com/documentation/onlinehelp/Documents/Tire/MFTyre-MFSwift_Help.pdf
+    % 
+    % To evaluate parameter set with mftyre.v62.eval(..) function, use the
+    % "struct()" method first to convert the object to a parameter struct.
+    %
+    
     properties
         %% [MODEL]
         FITTYP                  = mftyre.v62.Parameter(62,'Magic Formula version number')
@@ -358,11 +364,6 @@ classdef Parameters
         function tf = ne(params1, params2)
             tf = eq(params1, params2);
             tf = ~tf;
-        end
-        function params = Parameters(version)
-            if exist('version','var')
-                params.FITTYP.Value = version;
-            end
         end
         p = struct(params)
         [x,lb,ub] = convert2fittable(params,fitmode)
