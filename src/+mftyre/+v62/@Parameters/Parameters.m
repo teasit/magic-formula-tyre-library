@@ -17,7 +17,7 @@ classdef Parameters
         ASPECT_RATIO            = mftyre.v62.Parameter([], 'Nominal aspect ratio')
         %% [OPERATING_CONDITIONS]
         INFLPRES                = mftyre.v62.Parameter([], 'Tyre inflation pressure')
-        NOMPRES                 = mftyre.v62.Parameter([], 'Nominal pressure used in (MF) equations')
+        NOMPRES                 = mftyre.v62.Parameter(1E5, 'Nominal pressure used in (MF) equations')
         %% [INERTIA]
         MASS                    = mftyre.v62.Parameter([], 'Tyre mass')
         IXX                     = mftyre.v62.Parameter([], 'Tyre diametral moment of inertia')
@@ -27,7 +27,7 @@ classdef Parameters
         BELT_MASS               = mftyre.v62.Parameter([], 'Belt mass')
         GRAVITY                 = mftyre.v62.Parameter([], 'Gravity acting on belt in Z direction')
         %% [VERTICAL]
-        FNOMIN                  = mftyre.v62.Parameter([], 'Nominal wheel load')
+        FNOMIN                  = mftyre.v62.Parameter(1500, 'Nominal wheel load')
         VERTICAL_DAMPING        = mftyre.v62.Parameter([], 'Tyre vertical damping')
         VERTICAL_STIFFNESS      = mftyre.v62.Parameter([], 'Tyre vertical stiffness')
         MC_CONTOUR_A            = mftyre.v62.Parameter([], 'Motorcycle contour ellipse A')
