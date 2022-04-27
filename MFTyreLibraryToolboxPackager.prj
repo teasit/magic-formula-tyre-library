@@ -1,12 +1,12 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="3037034581" file="C:\Users\Tom\Documents\mftyre-matlab-library\MFTyreLibraryToolboxPackager.prj" location="C:\Users\Tom\Documents\mftyre-matlab-library" name="MFTyreLibraryToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="155048359" file="C:\Users\Tom\Documents\mftyre-matlab-library\MFTyreLibraryToolboxPackager.prj" location="C:\Users\Tom\Documents\mftyre-matlab-library" name="MFTyreLibraryToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>MFTyreLibrary</param.appname>
     <param.authnamewatermark>Tom Teasdale</param.authnamewatermark>
     <param.email>teasdale@lightsaber.red</param.email>
     <param.company />
     <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.</param.summary>
     <param.description />
-    <param.screenshot>C:\Users\Tom\Documents\mftyre-creation-tool\src\icons\icon.png</param.screenshot>
+    <param.screenshot>${PROJECT_ROOT}\doc\images\tyre_icon.png</param.screenshot>
     <param.version>1.0</param.version>
     <param.output>${PROJECT_ROOT}\MFTyreLibrary.mltbx</param.output>
     <param.products.name />
@@ -35,7 +35,8 @@
 %
 
 *.asv
-.git/*
++tests
+.git/
 .gitattributes
 .gitignore
 resources/</param.exclude.filters>
@@ -55,8 +56,8 @@ resources/</param.exclude.filters>
     <param.matlab.project.id />
     <param.matlab.project.name />
     <param.release.start>R2021a</param.release.start>
-    <param.release.end>R2021a</param.release.end>
-    <param.release.current.only>true</param.release.current.only>
+    <param.release.end>latest</param.release.end>
+    <param.release.current.only>false</param.release.current.only>
     <param.compatiblity.windows>true</param.compatiblity.windows>
     <param.compatiblity.macos>true</param.compatiblity.macos>
     <param.compatiblity.linux>true</param.compatiblity.linux>
@@ -87,6 +88,7 @@ resources/</param.exclude.filters>
       <param.exported.on.package />
       <param.matlab.project.id />
       <param.matlab.project.name />
+      <param.release.current.only />
       <param.compatiblity.windows />
       <param.compatiblity.macos />
       <param.compatiblity.linux />
@@ -101,8 +103,6 @@ resources/</param.exclude.filters>
       <file>${PROJECT_ROOT}</file>
     </fileset.rootdir>
     <fileset.rootfiles>
-      <file>${PROJECT_ROOT}\+tests</file>
-      <file>${PROJECT_ROOT}\.git</file>
       <file>${PROJECT_ROOT}\doc</file>
       <file>${PROJECT_ROOT}\LICENSE</file>
       <file>${PROJECT_ROOT}\README.md</file>
