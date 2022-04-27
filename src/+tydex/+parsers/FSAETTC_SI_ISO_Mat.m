@@ -29,6 +29,7 @@ classdef (Abstract) FSAETTC_SI_ISO_Mat < tydex.Parser
                     param.Value = param.Value*factor;
                     measurement.Constant(i) = param;
                 end
+                measurements(num) = measurement;
             end
         end
         function [newUnit,factor] = convertUnit(unit)
