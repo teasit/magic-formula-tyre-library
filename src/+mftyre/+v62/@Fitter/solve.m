@@ -4,6 +4,7 @@ arguments
     fitmode mftyre.v62.FitMode
 end
 import('mftyre.v62.FitMode')
+fitter.ActiveFitMode = fitmode;
 
 %% Initialize all required data
 idx = fitter.FitModeFlags(char(fitmode));

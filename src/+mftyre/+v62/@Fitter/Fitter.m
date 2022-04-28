@@ -5,6 +5,9 @@ classdef Fitter < handle
         FitModeFlags containers.Map
         Options optim.options.SolverOptions = optimoptions('fmincon')
     end
+    properties (Transient)
+        ActiveFitMode mftyre.v62.FitMode
+    end
     methods
         function fitter = Fitter(meas,params)
             arguments
