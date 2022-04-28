@@ -29,14 +29,14 @@ switch fitmode
         Fz       = mfinputs(:,1);
         modelout = Fy0(params,slipangl,inclangl,pressure,Fz);
     case FitMode.Fx
-        slipangl = -mfinputs(:,3); %TODO fix
+        slipangl = mfinputs(:,3);
         longslip = mfinputs(:,2);
         pressure = mfinputs(:,7);
         inclangl = mfinputs(:,4);
         Fz       = mfinputs(:,1);
         modelout = Fx(params,slipangl,longslip,inclangl,pressure,Fz);
     case FitMode.Fy
-        slipangl = -mfinputs(:,3); %TODO fix
+        slipangl = mfinputs(:,3);
         longslip = mfinputs(:,2);
         pressure = mfinputs(:,7);
         inclangl = mfinputs(:,4);

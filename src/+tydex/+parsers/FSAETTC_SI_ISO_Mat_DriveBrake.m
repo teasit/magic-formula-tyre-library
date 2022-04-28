@@ -24,15 +24,15 @@ classdef FSAETTC_SI_ISO_Mat_DriveBrake < tydex.parsers.FSAETTC_SI_ISO_Mat
             [~, locs.SLIPANGL]  = findpeaks([counts.SLIPANGL(2) counts.SLIPANGL counts.SLIPANGL(end-1)],    'MinPeakHeight', 1000);
             
             binvalues.FZW       = unique(round(abs(edges.FZW(locs.FZW))));
-            binvalues.INFLPRES  = unique(round(abs(edges.INFLPRES(locs.INFLPRES))));
-            binvalues.INCLANGL  = unique(round(abs(edges.INCLANGL(locs.INCLANGL))));
-            binvalues.SLIPANGL  = unique(round(abs(edges.SLIPANGL(locs.SLIPANGL))));
+            binvalues.INFLPRES  = unique(round(edges.INFLPRES(locs.INFLPRES)));
+            binvalues.INCLANGL  = unique(round(edges.INCLANGL(locs.INCLANGL)));
+            binvalues.SLIPANGL  = unique(round(edges.SLIPANGL(locs.SLIPANGL)));
             
             eps = obj.SteadyStateTolerances;
-            bins.FZW      = abs(data.FZ)     >(binvalues.FZW-eps.FZW)            &   abs(data.FZ)    <(binvalues.FZW+eps.FZW);
-            bins.INCLANGL = abs(data.IA)     >(binvalues.INCLANGL-eps.INCLANGL)  &   abs(data.IA)    <(binvalues.INCLANGL+eps.INCLANGL);
-            bins.SLIPANGL = abs(data.SA)     >(binvalues.SLIPANGL-eps.SLIPANGL)  &   abs(data.SA)    <(binvalues.SLIPANGL+eps.SLIPANGL);
-            bins.INFLPRES = abs(data.P)      >(binvalues.INFLPRES-eps.INFLPRES)  &   abs(data.P)     <(binvalues.INFLPRES+eps.INFLPRES);
+            bins.FZW      = abs(data.FZ)     >(abs(binvalues.FZW)-eps.FZW)            &   abs(data.FZ)    <(abs(binvalues.FZW)+eps.FZW);
+            bins.INCLANGL = abs(data.IA)     >(abs(binvalues.INCLANGL)-eps.INCLANGL)  &   abs(data.IA)    <(abs(binvalues.INCLANGL)+eps.INCLANGL);
+            bins.SLIPANGL = abs(data.SA)     >(abs(binvalues.SLIPANGL)-eps.SLIPANGL)  &   abs(data.SA)    <(abs(binvalues.SLIPANGL)+eps.SLIPANGL);
+            bins.INFLPRES = abs(data.P)      >(binvalues.INFLPRES-eps.INFLPRES)       &   abs(data.P)     <(binvalues.INFLPRES+eps.INFLPRES);
             
             measurements(length(binvalues.FZW)...
                 *length(binvalues.INCLANGL)...

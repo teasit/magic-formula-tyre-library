@@ -22,13 +22,13 @@ classdef FSAETTC_SI_ISO_Mat_Cornering < tydex.parsers.FSAETTC_SI_ISO_Mat
             [~, locs.INCLANGL]  = findpeaks([counts.INCLANGL(2) counts.INCLANGL counts.INCLANGL(end-1)],    'MinPeakHeight', 1000);
             
             binvalues.FZW       = unique(round(abs(edges.FZW(locs.FZW))));
-            binvalues.INFLPRES  = unique(round(abs(edges.INFLPRES(locs.INFLPRES))));
-            binvalues.INCLANGL  = unique(round(abs(edges.INCLANGL(locs.INCLANGL)),2));
+            binvalues.INFLPRES  = unique(round(edges.INFLPRES(locs.INFLPRES)));
+            binvalues.INCLANGL  = unique(round(edges.INCLANGL(locs.INCLANGL)));
             
             eps = obj.SteadyStateTolerances;
-            bins.FZW      = abs(data.FZ) >(binvalues.FZW-eps.FZW)           &   abs(data.FZ)   <(binvalues.FZW+eps.FZW);
-            bins.INCLANGL = abs(data.IA) >(binvalues.INCLANGL-eps.INCLANGL) &   abs(data.IA)   <(binvalues.INCLANGL+eps.INCLANGL);
-            bins.INFLPRES = abs(data.P)  >(binvalues.INFLPRES-eps.INFLPRES) &   abs(data.P)    <(binvalues.INFLPRES+eps.INFLPRES);
+            bins.FZW      = abs(data.FZ) >(binvalues.FZW-eps.FZW)                &   abs(data.FZ)   <(binvalues.FZW+eps.FZW);
+            bins.INCLANGL = abs(data.IA) >(abs(binvalues.INCLANGL)-eps.INCLANGL) &   abs(data.IA)   <(abs(binvalues.INCLANGL)+eps.INCLANGL);
+            bins.INFLPRES = abs(data.P)  >(binvalues.INFLPRES-eps.INFLPRES)      &   abs(data.P)    <(binvalues.INFLPRES+eps.INFLPRES);
             
             measurements(length(binvalues.FZW)...
                 *length(binvalues.INCLANGL)...
