@@ -27,9 +27,6 @@ classdef Measurement
         MZW
     end
     methods
-        function meas = Measurement()
-            meas = index(meas);
-        end
         meas = index(meas)
         len = length(meas)
         meas = downsample(meas,n,phase)
