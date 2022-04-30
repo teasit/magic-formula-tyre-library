@@ -43,6 +43,41 @@ classdef Fitter < handle
         end
     end
     methods
+        function run(fitter)
+            %RUN Fits all modes specified in "FitModes" property.
+            import mftyre.v62.FitMode
+            warning('off', 'MATLAB:nearlySingularMatrix')
+            fprintf('Starting MF-Tyre fitter...\n')
+            fitmodes = fitter.FitModes;
+            fitter.ParametersFitted = fitter.Parameters;
+            for i = 1:numel(fitmodes)
+                fitmode = fitmodes(i);
+                try
+                    fprintf('Fitting Fit-Mode: %s\n', char(fitmode))
+                    tic; x = fitter.solve(fitmode); t = toc;
+                    fprintf('Finished Fit-Mode: %s\n', char(fitmode))
+                    fprintf('Time elapsed %.1fs.\n', t)
+                    p = appendFitted(fitter.ParametersFitted, x, fitmode);
+                    fitter.ParametersFitted = p;
+                catch ME
+                    warning('on', 'MATLAB:nearlySingularMatrix')
+                    E = exceptions.FitterFailed(char(fitmode));
+                    E = addCause(E, ME);
+                    throw(E)
+                end
+            end
+            warning('on', 'MATLAB:nearlySingularMatrix')
+        end
+        function fitter = Fitter(measurements, parameters)
+            arguments
+                measurements tydex.Measurement = tydex.Measurement.empty
+                parameters mftyre.v62.Parameters = mftyre.v62.Parameters.empty
+            end
+            fitter.Measurements = measurements;
+            fitter.Parameters = parameters;
+        end
+    end
+    methods (Access = private)
         function x = solve(fitter,fitmode)
             %SOLVE Fit model only for one fitmode.
             arguments
@@ -52,17 +87,28 @@ classdef Fitter < handle
             import('mftyre.v62.FitMode')
             fitter.ActiveFitMode = fitmode;
             
-            idx = fitter.FitModeFlags(char(fitmode));
-            meas = fitter.Measurements(idx);
-            params = fitter.Parameters;
-            meas = downsample(meas,3,0);
-            mfinputs = fitter.preprocess(meas);
+            measurements = fitter.Measurements;
+            if isempty(measurements)
+                E = exceptions.EmptyMeasurement();
+                throw(E)
+            end
             
+            I = fitter.FitModeFlags(char(fitmode));
+            measurements = measurements(I);
+            if isempty(measurements)
+                E = exceptions.NoMeasurementForFitMode(char(fitmode));
+                throw(E)
+            end
+            
+            measurements = measurements.downsample(3,0);
+            
+            params = fitter.Parameters;
+            mfinputs = fitter.preprocess(measurements);
             switch fitmode
                 case {FitMode.Fx0, FitMode.Fx}
-                    testdata = cat(1,meas.FX);
+                    testdata = cat(1,measurements.FX);
                 case {FitMode.Fy0, FitMode.Fy}
-                    testdata = cat(1,meas.FYW);
+                    testdata = cat(1,measurements.FYW);
                 case FitMode.Mz0
                     error('Not yet implemented')
                 case FitMode.Mx
@@ -81,33 +127,6 @@ classdef Fitter < handle
             options = fitter.Options;
             x = fmincon(costFun,x0,[],[],[],[],lb,ub,nonlcon,options);
         end
-        function run(fitter)
-            import mftyre.v62.FitMode
-            
-            fitmodes = fitter.FitModes;
-            fitter.ParametersFitted = fitter.Parameters;
-            for i = 1:numel(fitmodes)
-                fitmode = fitmodes(i);
-                try
-                    tic; x = fitter.solve(fitmode); t = toc;
-                    fprintf('Time elapsed %.1fs.\n', t)
-                    p = appendFitted(fitter.ParametersFitted, x, fitmode);
-                    fitter.ParametersFitted = p;
-                catch ME
-                    % TODO: exception
-                end
-            end
-        end
-        function fitter = Fitter(measurements, parameters)
-            arguments
-                measurements tydex.Measurement = tydex.Measurement.empty
-                parameters mftyre.v62.Parameters = mftyre.v62.Parameters.empty
-            end
-            fitter.Measurements = measurements;
-            fitter.Parameters = parameters;
-        end
-    end
-    methods (Access = private)
         function qualifyMeasurements(fitter)
             % QUALITFYMEASUREMENTS Finds which measurements can be used for
             % which fit-mode. For example, data which only includes

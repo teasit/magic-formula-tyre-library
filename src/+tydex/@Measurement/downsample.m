@@ -1,13 +1,16 @@
-function meas = downsample(meas,n,phase)
+function measurements = downsample(measurements,n,phase)
     arguments
-        meas tydex.Measurement
+        measurements tydex.Measurement
         n double
         phase double
     end
-    for num = 1:numel(meas)
-        for i = 1:numel(meas(num).Measured)
-            downsampled = downsample(meas(num).Measured(i).Data,n,phase);
-            meas(num).Measured(i).Data = downsampled;
+    for num = 1:numel(measurements)
+        measurement = measurements(num);
+        for i = 1:numel(measurement.Measured)
+            measured = measurement.Measured(i);
+            data = measured.Data;
+            downsampled = downsample(data, n, phase);
+            measurements(num).Measured(i).Data = downsampled;
         end
     end
 end
