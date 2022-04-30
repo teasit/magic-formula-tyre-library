@@ -2,7 +2,7 @@ classdef Parameters
     %PARAMETERS MFTyre 6.1.2 parameter set.
     % Parameter names implemented according to MF-Tyre/MF-Swift manual:
     %   https://functionbay.com/documentation/onlinehelp/Documents/Tire/MFTyre-MFSwift_Help.pdf
-    % 
+    %
     % To evaluate parameter set with mftyre.v62.eval(..) function, use the
     % "struct()" method first to convert the object to a parameter struct.
     %
@@ -86,7 +86,7 @@ classdef Parameters
         Q_RA2                   = mftyre.v62.ParameterFittable([], -inf, inf, 'Linear term in contact length equation')
         Q_RB1                   = mftyre.v62.ParameterFittable([], -inf, inf, 'Root term in contact width equation')
         Q_RB2                   = mftyre.v62.ParameterFittable([], -inf, inf, 'Linear term in contact width equation')
-        ELLIPS_SHIFT            = mftyre.v62.Parameter([], 'Scaling of distance between front and rear ellipsoid') 
+        ELLIPS_SHIFT            = mftyre.v62.Parameter([], 'Scaling of distance between front and rear ellipsoid')
         ELLIPS_LENGTH           = mftyre.v62.Parameter([], 'Semimajor axis of ellipsoid')
         ELLIPS_HEIGHT           = mftyre.v62.Parameter([], 'Semiminor axis of ellipsoid')
         ELLIPS_ORDER            = mftyre.v62.Parameter([], 'Order of ellipsoid')
@@ -297,15 +297,15 @@ classdef Parameters
         QBRP1                   = mftyre.v62.ParameterFittable(0, -inf, inf, 'Residual (spin) torque reduction factor parameter due to side slip')
         QDRP1                   = mftyre.v62.ParameterFittable(0, -inf, inf, 'Turn slip moment peak magnitude parameter')
         %% [ZETA_FACTORS] (not included in MF-Tyre/MF-Swift manual; see Pacejka book page 178 for more information)
-        ZETA0                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA1                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA2                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA3                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA4                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA5                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA6                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA7                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
-        ZETA8                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor fo the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA0                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA1                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA2                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA3                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA4                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA5                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA6                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA7                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
+        ZETA8                   = mftyre.v62.ParameterFittable(1, -inf, inf, "Factor for the extension of the model for turn slip. See Pacejka's book chapter 4.3.3")
     end
     % properties % TNO Road Definition
     %     %% [UNITS]
@@ -321,10 +321,10 @@ classdef Parameters
     %     FUNCTION_NAME           = mftyre.v62.Parameter('TNO_DelftTyre_Adams_interface::TYR815')
     %     % USER_SUB_ID             = mftyre.v62.Parameter(815) % obsolete
     %     N_TIRE_STATES           = mftyre.v62.Parameter(5)
-    %     FILE_FORMAT             = mftyre.v62.Parameter() 
+    %     FILE_FORMAT             = mftyre.v62.Parameter()
     %     FILE_TYPE               = mftyre.v62.Parameter()
     %     FILE_VERSION            = mftyre.v62.Parameter()
-    %     SWITCH_INTEG            = mftyre.v62.Parameter('default')    
+    %     SWITCH_INTEG            = mftyre.v62.Parameter('default')
     %     TIME_SWITCH_INTEG       = mftyre.v62.Parameter()
     %     PROPERTY_FILE_FORMAT    = mftyre.v62.Parameter()
     %     USE_MODE                = mftyre.v62.Parameter()
@@ -365,13 +365,56 @@ classdef Parameters
             tf = eq(params1, params2);
             tf = ~tf;
         end
-        p = struct(params)
-        [x,lb,ub] = convert2fittable(params,fitmode)
-        params = appendFitted(params,x,fitmode)
-    end
-    methods (Static)
-        names = getFitParamNames(fitmode)
-        params = setDefault(params)
+        function p = struct(params)
+            paramNames = fieldnames(params);
+            p = struct;
+            for i = 1:length(paramNames)
+                name = paramNames{i};
+                value = params.(name).Value;
+                if strcmp(name, 'TYRESIDE') && ischar(value)
+                    value = strcmpi(value, 'RIGHT');
+                end
+                p.(name) = value;
+            end
+        end
+        function [x,lb,ub] = convert2fittable(params,fitmode)
+            arguments
+                params mftyre.v62.Parameters
+                fitmode mftyre.v62.FitMode
+            end
+            import('mftyre.v62.FitMode')
+            import('mftyre.v62.getFitParamNames')
+            fn = fieldnames(params);
+            fitparams = getFitParamNames(fitmode);
+            allParamsExist = numel(intersect(fn,fitparams)) == numel(fitparams);
+            assert(allParamsExist)
+            x  = zeros(length(fitparams),1);
+            lb = zeros(length(fitparams),1);
+            ub = zeros(length(fitparams),1);
+            for i=1:numel(fitparams)
+                x(i)  = params.(fitparams{i}).Value;
+                if params.(fitparams{i}).Fixed
+                    lb(i) = params.(fitparams{i}).Value;
+                    ub(i) = params.(fitparams{i}).Value;
+                else
+                    lb(i) = params.(fitparams{i}).Min;
+                    ub(i) = params.(fitparams{i}).Max;
+                end
+            end
+        end
+        function params = appendFitted(params,x,fitmode)
+            arguments
+                params mftyre.v62.Parameters
+                x double
+                fitmode mftyre.v62.FitMode
+            end
+            import('mftyre.v62.FitMode')
+            import('mftyre.v62.getFitParamNames')
+            fitparams = getFitParamNames(fitmode);
+            for i=1:numel(fitparams)
+                params.(fitparams{i}).Value = x(i);
+            end
+        end
     end
 end
 
