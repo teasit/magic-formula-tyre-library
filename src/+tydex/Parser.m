@@ -8,9 +8,15 @@ classdef (Abstract) Parser < handle
     %       angles: Degree
     %       forces: Newton
     %       slip ratio: 1 (no unit)
-    %       
-    methods (Abstract)
+    %
+    methods (Abstract, Access = protected)
         [measurements, bins, binvalues] = parse(obj,file)
+    end
+    methods
+        function [measurements, bins, binvalues] = run(obj, file)
+            [measurements, bins, binvalues] = parse(obj, file);
+            measurements = measurements.index();
+        end
     end
 end
 

@@ -1,5 +1,5 @@
 classdef FSAETTC_SI_ISO_Mat_DriveBrake < tydex.parsers.FSAETTC_SI_ISO_Mat
-    methods (Access = public)
+    methods (Access = protected)
         function [measurements, bins, binvalues] = parse(obj,file)
             arguments
                 obj
