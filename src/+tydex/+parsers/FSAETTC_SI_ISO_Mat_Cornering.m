@@ -1,5 +1,5 @@
 classdef FSAETTC_SI_ISO_Mat_Cornering < tydex.parsers.FSAETTC_SI_ISO_Mat
-    methods (Access = public)
+    methods (Access = protected)
         function [measurements, bins, binvalues] = parse(obj, file)
             arguments
                 obj
@@ -21,9 +21,9 @@ classdef FSAETTC_SI_ISO_Mat_Cornering < tydex.parsers.FSAETTC_SI_ISO_Mat
             [~, locs.INFLPRES]  = findpeaks([counts.INFLPRES(2) counts.INFLPRES counts.INFLPRES(end-1)],    'MinPeakHeight', 1000);
             [~, locs.INCLANGL]  = findpeaks([counts.INCLANGL(2) counts.INCLANGL counts.INCLANGL(end-1)],    'MinPeakHeight', 1000);
             
-            binvalues.FZW       = unique(round(abs(edges.FZW(locs.FZW))));
-            binvalues.INFLPRES  = unique(round(edges.INFLPRES(locs.INFLPRES)));
-            binvalues.INCLANGL  = unique(round(edges.INCLANGL(locs.INCLANGL)));
+            binvalues.FZW       = unique(round(abs(edges.FZW(locs.FZW)),2));
+            binvalues.INFLPRES  = unique(round(edges.INFLPRES(locs.INFLPRES),2));
+            binvalues.INCLANGL  = unique(round(edges.INCLANGL(locs.INCLANGL),2));
             
             eps = obj.SteadyStateTolerances;
             bins.FZW      = abs(data.FZ) >(binvalues.FZW-eps.FZW)                &   abs(data.FZ)   <(binvalues.FZW+eps.FZW);
