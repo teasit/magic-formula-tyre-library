@@ -6,15 +6,29 @@
 [Fx,Fy] = mftyre.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
 ```
 
-This repository contains easy-to-use functions and classes to:
+- Computationally efficient MF-Tyre functions
+- Code generation compatible
+- Automatically fit MF-Tyre models to data
+- TIR import/export (Tyre Property File format)
+- TYDEX import (Tyre Data Exchange format)
 
-- Represent MFTyre models in a OOP-way
-- Evaluate MFTyre parameter sets to calculate Tyre Forces (FX,FY)
-- Read and Store tyre models in TIR files (Tyre Property File).
-  Useful especially for exporting tyre models to Siemens Multibody or similar.
-- Import and export tyre data using the TYDEX format.
-  Useful to export tyre data in Siemens MF-Tool readable format.
-- Fit MFTyre models to tyre data (curve-fitting).
+## Installation
+
+You can use the features of this library in two ways:
+
+- As a local ToolBox (simply download and install [`MFTyreLibrary.mltbx`](./MFTyreLibrary.mltbx))
+- As a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
+
+To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
+This is better if this project ought to be part of a larger Git-based project.
+You could then add it as a Git Submodule.
+
+## Usage and Examples
+
+For interactive examples and usage instructions, open the MATLAB live script
+[`doc/GettingStarted.mlx`](./doc/GettingStarted.mlx) in your editor.
+
+## Motivation
 
 The project was motivated by my work in the Formula Student Team
 [UPBracing](https://formulastudent.uni-paderborn.de/en/). As I required
@@ -33,22 +47,6 @@ If you have any questions, don't hesitate to contact me! I will try and keep thi
 project updated in the future. If you want to contribute, please do. But I
 must warn you, I am still new to publishing code as open-source and do not yet
 know the ins and outs of working collaboratively on GitHub.
-
-## Installation
-
-You can use the features of this library in two ways:
-
-- As a local ToolBox (simply download and install [`MFTyreLibrary.mltbx`](./MFTyreLibrary.mltbx))
-- As a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
-
-To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
-This is better if this project ought to be part of a larger Git-based project.
-You could then add it as a Git Submodule.
-
-## Usage and Examples
-
-For interactive examples and usage instructions, open the MATLAB live script
-[`doc/GettingStarted.mlx`](./doc/GettingStarted.mlx) in your editor.
 
 ## Known Issues, Notes and Bugs
 
