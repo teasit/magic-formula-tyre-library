@@ -17,6 +17,9 @@ classdef Fitter < handle
     properties (SetAccess = protected)
         %Fitted parameter values, updated after each Fit-Mode solve.
         ParametersFitted mftyre.v62.Parameters
+        
+        %Input fitmode name, map will return index array for measurements.
+        FitModeFlags containers.Map
     end
     properties (SetAccess = protected, Transient)
         %Returns the Fit-Mode that is currently being solved.
@@ -26,7 +29,6 @@ classdef Fitter < handle
         ActiveFitMode mftyre.v62.FitMode
     end
     properties (Access = private)
-        FitModeFlags containers.Map
     end
     methods
         function set.FitModes(fitter, fitmodes)
