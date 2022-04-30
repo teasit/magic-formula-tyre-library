@@ -12,6 +12,8 @@
 - TIR import/export (Tyre Property File format)
 - TYDEX import (Tyre Data Exchange format)
 
+![MF-Tyre Fitting Example](doc/images/mftyrelib_fit_example.svg)
+
 ## Installation
 
 You can use the features of this library in two ways:
