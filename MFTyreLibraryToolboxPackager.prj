@@ -4,10 +4,11 @@
     <param.authnamewatermark>Tom Teasdale</param.authnamewatermark>
     <param.email>teasdale@lightsaber.red</param.email>
     <param.company />
-    <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.</param.summary>
+    <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.
+https://github.com/teasit/mftyre-matlab-library</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\tyre_icon.png</param.screenshot>
-    <param.version>1.0.1</param.version>
+    <param.version>1.0.0</param.version>
     <param.output>${PROJECT_ROOT}\MFTyreLibrary.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -39,18 +40,11 @@
 .git/
 .gitattributes
 .gitignore
-resources/</param.exclude.filters>
+resources/
+release/
+tools/</param.exclude.filters>
     <param.exclude.pcodedmfiles>true</param.exclude.pcodedmfiles>
-    <param.examples>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;examples&gt;
-   &lt;exampleCategory name="examples"&gt;
-      &lt;example name="Example_MFTyreLibrary_Fitter_FSAETTC" type="html"&gt;
-         &lt;file type="source"&gt;/doc/examples/html/Example_MFTyreLibrary_Fitter_FSAETTC.html&lt;/file&gt;
-         &lt;file type="main"&gt;/doc/examples/Example_MFTyreLibrary_Fitter_FSAETTC.mlx&lt;/file&gt;
-         &lt;file type="thumbnail"/&gt;
-      &lt;/example&gt;
-   &lt;/exampleCategory&gt;
-&lt;/examples&gt;</param.examples>
+    <param.examples />
     <param.demosxml />
     <param.apps />
     <param.registered.apps />
@@ -78,6 +72,8 @@ resources/</param.exclude.filters>
     <param.additional.sw.mac.url />
     <param.additional.sw.linux.url />
     <unset>
+      <param.authnamewatermark />
+      <param.email />
       <param.company />
       <param.description />
       <param.output />
@@ -86,6 +82,7 @@ resources/</param.exclude.filters>
       <param.products.version />
       <param.platforms />
       <param.exclude.pcodedmfiles />
+      <param.examples />
       <param.demosxml />
       <param.apps />
       <param.registered.apps />
@@ -109,7 +106,7 @@ resources/</param.exclude.filters>
       <file>${PROJECT_ROOT}</file>
     </fileset.rootdir>
     <fileset.rootfiles>
-      <file>${PROJECT_ROOT}\demos.xml</file>
+      <file>${PROJECT_ROOT}\CHANGELOG.md</file>
       <file>${PROJECT_ROOT}\doc</file>
       <file>${PROJECT_ROOT}\LICENSE</file>
       <file>${PROJECT_ROOT}\README.md</file>
