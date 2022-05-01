@@ -8,7 +8,7 @@
 https://github.com/teasit/mftyre-matlab-library</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\tyre_icon.png</param.screenshot>
-    <param.version>1.0.0</param.version>
+    <param.version>1.0.1</param.version>
     <param.output>${PROJECT_ROOT}\MFTyreLibrary.mltbx</param.output>
     <param.products.name />
     <param.products.id />

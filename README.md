@@ -1,5 +1,7 @@
 # MF-Tyre MATLAB Library
 
+[![View MFTyreLibrary on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955-mftyrelibrary)
+
 ![Social Preview Image](./doc/images/tyre_icon_socialpreview.png)
 
 ```matlab
