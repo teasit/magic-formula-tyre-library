@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="2363634414" file="C:\Users\Tom\Documents\mftyre-creation-tool\src\mftyre-matlab-library\MFTyreLibraryToolboxPackager.prj" location="C:\Users\Tom\Documents\mftyre-creation-tool\src\mftyre-matlab-library" name="MFTyreLibraryToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="2363634414" file="C:\Users\Tom\Documents\mftyre-tool-matlab\src\mftyre-matlab-library\MFTyreLibraryToolboxPackager.prj" location="C:\Users\Tom\Documents\mftyre-tool-matlab\src\mftyre-matlab-library" name="MFTyreLibraryToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>MFTyreLibrary</param.appname>
     <param.authnamewatermark>Tom Teasdale</param.authnamewatermark>
     <param.email>teasdale@lightsaber.red</param.email>
@@ -41,7 +41,16 @@
 .gitignore
 resources/</param.exclude.filters>
     <param.exclude.pcodedmfiles>true</param.exclude.pcodedmfiles>
-    <param.examples />
+    <param.examples>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;examples&gt;
+   &lt;exampleCategory name="examples"&gt;
+      &lt;example name="Example_MFTyreLibrary_Fitter_FSAETTC" type="html"&gt;
+         &lt;file type="source"&gt;/doc/examples/html/Example_MFTyreLibrary_Fitter_FSAETTC.html&lt;/file&gt;
+         &lt;file type="main"&gt;/doc/examples/Example_MFTyreLibrary_Fitter_FSAETTC.mlx&lt;/file&gt;
+         &lt;file type="thumbnail"/&gt;
+      &lt;/example&gt;
+   &lt;/exampleCategory&gt;
+&lt;/examples&gt;</param.examples>
     <param.demosxml />
     <param.apps />
     <param.registered.apps />
@@ -49,7 +58,7 @@ resources/</param.exclude.filters>
     <param.getting.started.guide>${PROJECT_ROOT}\doc\GettingStarted.mlx</param.getting.started.guide>
     <param.matlabpath.excludes />
     <param.javaclasspath.excludes />
-    <param.exported.on.package>false</param.exported.on.package>
+    <param.exported.on.package>true</param.exported.on.package>
     <param.required.addons>
       <requiredaddons />
     </param.required.addons>
@@ -77,14 +86,12 @@ resources/</param.exclude.filters>
       <param.products.version />
       <param.platforms />
       <param.exclude.pcodedmfiles />
-      <param.examples />
       <param.demosxml />
       <param.apps />
       <param.registered.apps />
       <param.docs />
       <param.matlabpath.excludes />
       <param.javaclasspath.excludes />
-      <param.exported.on.package />
       <param.matlab.project.id />
       <param.matlab.project.name />
       <param.release.current.only />
@@ -102,6 +109,7 @@ resources/</param.exclude.filters>
       <file>${PROJECT_ROOT}</file>
     </fileset.rootdir>
     <fileset.rootfiles>
+      <file>${PROJECT_ROOT}\demos.xml</file>
       <file>${PROJECT_ROOT}\doc</file>
       <file>${PROJECT_ROOT}\LICENSE</file>
       <file>${PROJECT_ROOT}\README.md</file>
@@ -111,7 +119,7 @@ resources/</param.exclude.filters>
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="MFTyreLibrary.mltbx" optional="false">C:\Users\Tom\Documents\mftyre-creation-tool\src\mftyre-matlab-library\MFTyreLibrary.mltbx</file>
+      <file location="${PROJECT_ROOT}" name="MFTyreLibrary.mltbx" optional="false">C:\Users\Tom\Documents\mftyre-tool-matlab\src\mftyre-matlab-library\MFTyreLibrary.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
