@@ -4,11 +4,10 @@
     <param.authnamewatermark>Tom Teasdale</param.authnamewatermark>
     <param.email>teasdale@lightsaber.red</param.email>
     <param.company />
-    <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.
-https://github.com/teasit/mftyre-matlab-library</param.summary>
+    <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\tyre_icon.png</param.screenshot>
-    <param.version>1.0.1</param.version>
+    <param.version>1.0.2</param.version>
     <param.output>${PROJECT_ROOT}\MFTyreLibrary.mltbx</param.output>
     <param.products.name />
     <param.products.id />
