@@ -1,13 +1,14 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="2363634414" file="C:\Users\Tom\Documents\mftyre-creation-tool\src\mftyre-matlab-library\MFTyreLibraryToolboxPackager.prj" location="C:\Users\Tom\Documents\mftyre-creation-tool\src\mftyre-matlab-library" name="MFTyreLibraryToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="2363634414" file="C:\Users\Tom\Documents\mftyre-tool-matlab\src\mftyre-matlab-library\MFTyreLibraryToolboxPackager.prj" location="C:\Users\Tom\Documents\mftyre-tool-matlab\src\mftyre-matlab-library" name="MFTyreLibraryToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>MFTyreLibrary</param.appname>
     <param.authnamewatermark>Tom Teasdale</param.authnamewatermark>
     <param.email>teasdale@lightsaber.red</param.email>
     <param.company />
-    <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.</param.summary>
+    <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.
+https://github.com/teasit/mftyre-matlab-library</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\tyre_icon.png</param.screenshot>
-    <param.version>1.0.1</param.version>
+    <param.version>1.0.0</param.version>
     <param.output>${PROJECT_ROOT}\MFTyreLibrary.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -39,7 +40,9 @@
 .git/
 .gitattributes
 .gitignore
-resources/</param.exclude.filters>
+resources/
+release/
+tools/</param.exclude.filters>
     <param.exclude.pcodedmfiles>true</param.exclude.pcodedmfiles>
     <param.examples />
     <param.demosxml />
@@ -49,7 +52,7 @@ resources/</param.exclude.filters>
     <param.getting.started.guide>${PROJECT_ROOT}\doc\GettingStarted.mlx</param.getting.started.guide>
     <param.matlabpath.excludes />
     <param.javaclasspath.excludes />
-    <param.exported.on.package>false</param.exported.on.package>
+    <param.exported.on.package>true</param.exported.on.package>
     <param.required.addons>
       <requiredaddons />
     </param.required.addons>
@@ -69,6 +72,8 @@ resources/</param.exclude.filters>
     <param.additional.sw.mac.url />
     <param.additional.sw.linux.url />
     <unset>
+      <param.authnamewatermark />
+      <param.email />
       <param.company />
       <param.description />
       <param.output />
@@ -84,7 +89,6 @@ resources/</param.exclude.filters>
       <param.docs />
       <param.matlabpath.excludes />
       <param.javaclasspath.excludes />
-      <param.exported.on.package />
       <param.matlab.project.id />
       <param.matlab.project.name />
       <param.release.current.only />
@@ -102,6 +106,7 @@ resources/</param.exclude.filters>
       <file>${PROJECT_ROOT}</file>
     </fileset.rootdir>
     <fileset.rootfiles>
+      <file>${PROJECT_ROOT}\CHANGELOG.md</file>
       <file>${PROJECT_ROOT}\doc</file>
       <file>${PROJECT_ROOT}\LICENSE</file>
       <file>${PROJECT_ROOT}\README.md</file>
@@ -111,7 +116,7 @@ resources/</param.exclude.filters>
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="MFTyreLibrary.mltbx" optional="false">C:\Users\Tom\Documents\mftyre-creation-tool\src\mftyre-matlab-library\MFTyreLibrary.mltbx</file>
+      <file location="${PROJECT_ROOT}" name="MFTyreLibrary.mltbx" optional="false">C:\Users\Tom\Documents\mftyre-tool-matlab\src\mftyre-matlab-library\MFTyreLibrary.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
