@@ -18,19 +18,18 @@
 
 ## Installation
 
-You can use the features of this library in two ways:
+There are several ways:
 
-- As a local ToolBox (simply download and install [`MFTyreLibrary.mltbx`](./MFTyreLibrary.mltbx))
-- As a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
-
-To use as a project reference, follow the instructions [here](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html).
-This is better if this project ought to be part of a larger Git-based project.
-You could then add it as a Git Submodule.
+- Download latest Release from [MATLAB File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/110955)
+- Download latest Release from [GitHub](https://github.com/teasit/mftyre-matlab-library/releases))
+- Clone using Git and integrate into your projects using a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
 
 ## Usage and Examples
 
-For interactive examples and usage instructions, open the MATLAB live script
+To get started with interactive examples, open the MATLAB live script
 [`doc/GettingStarted.mlx`](./doc/GettingStarted.mlx) in your editor.
+
+You can find further examples in the  [`doc/examples`](./doc/examples) folder.
 
 ## Motivation
 
