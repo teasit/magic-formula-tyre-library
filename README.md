@@ -21,7 +21,7 @@
 There are several ways:
 
 - Download latest Release from [MATLAB File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/110955)
-- Download latest Release from [GitHub](https://github.com/teasit/mftyre-matlab-library/releases))
+- Download latest Release from [GitHub](https://github.com/teasit/mftyre-matlab-library/releases)
 - Clone using Git and integrate into your projects using a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
 
 ## Usage and Examples
