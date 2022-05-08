@@ -1,3 +1,3 @@
 # Changelog
 
-- Updated Toolbox description for File Exchange
+- Minor README update
