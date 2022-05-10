@@ -31,6 +31,13 @@ To get started with interactive examples, open the MATLAB live script
 
 You can find further examples in the  [`doc/examples`](./doc/examples) folder.
 
+I also created an open-source GUI application in MATLAB for interactive fitting
+of MF-Tyre models to measurement data.
+It uses this library as a submodule, meaning that fitted parameter sets with the GUI can
+be used with the equations provided by this CLI library.
+You can find it here:
+[MF-Tyre MATLAB Tool](https://github.com/teasit/mftyre-matlab-tool)!
+
 ## Motivation
 
 The project was motivated by my work in the Formula Student Team
