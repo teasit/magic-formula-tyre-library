@@ -58,6 +58,16 @@ project updated in the future. If you want to contribute, please do. But I
 must warn you, I am still new to publishing code as open-source and do not yet
 know the ins and outs of working collaboratively on GitHub.
 
+This project would not have been possible without the data provided by the
+[Formula SAE Tire Test Consortium (FSAE TTC)](https://www.millikenresearch.com/fsaettc.html)
+and the
+[Calspan Tire Testing Research Facility (TIRF)](https://calspan.com/automotive/fsae-ttc).
+De-identified and obscured test data has been used in examples and images or recordings
+of the application, to conform to the
+[license agreement](https://www.millikenresearch.com/FSAE_TTC_agreement.pdf).
+Special thanks to Dr. Edward M. Kasprzak for granting me permission to provide the used,
+de-identified and obscured data for demonstration purposes.
+
 ## Known Issues, Notes and Bugs
 
 - Currently only MFTyre version 6.1.2 (62) is implemented
