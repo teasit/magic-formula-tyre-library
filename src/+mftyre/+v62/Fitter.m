@@ -104,7 +104,7 @@ classdef Fitter < handle
             
             measurements = measurements.downsample(3,0);
             
-            params = fitter.Parameters;
+            params = fitter.ParametersFitted;
             mfinputs = fitter.preprocess(measurements);
             switch fitmode
                 case {FitMode.Fx0, FitMode.Fx}
