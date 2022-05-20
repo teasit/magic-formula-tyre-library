@@ -154,7 +154,7 @@ classdef Fitter < handle
             for i = 1:numMeas
                 const = measurements(i).Constant;
                 I = strcmp({const.Name},'SLIPANGL');
-                if any(I) && const(I).Value == 0; idx(i) = 1; end
+                idx(i) = any(I) && abs(const(I).Value) <= deg2rad(0.3);
             end
             key = find(strcmp(keys,char(mftyre.v62.FitMode.Fx0)),1);
             vals{key} = find(idx);
@@ -164,7 +164,7 @@ classdef Fitter < handle
             for i = 1:numMeas
                 const = measurements(i).Constant;
                 I = strcmp({const.Name},'LONGSLIP');
-                if any(I) && const(I).Value == 0; idx(i) = 1; end
+                idx(i) = any(I) && abs(const(I).Value) <= 0.005;
             end
             key = find(strcmp(keys,char(mftyre.v62.FitMode.Fy0)),1);
             vals{key} = find(idx);
@@ -177,11 +177,8 @@ classdef Fitter < handle
                 const = measurements(i).Constant;
                 I1 = strcmp({const.Name},'LONGSLIP');
                 I2 = strcmp({const.Name},'SLIPANGL');
-                if (any(I1) && const(I1).Value == 0) || (any(I2) && const(I2).Value == 0)
-                    idx(i) = 0;
-                else
-                    idx(i) = 1;
-                end
+                idx(i) = ~(any(I1) && const(I1).Value == 0) ...
+                    || (any(I2) && const(I2).Value == 0);
             end
             key = find(strcmp(keys,char(mftyre.v62.FitMode.Mz)),1);
             vals{key} = find(idx);
