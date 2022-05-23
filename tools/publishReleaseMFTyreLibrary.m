@@ -20,6 +20,10 @@ if isempty(title)
     title = version;
 end
 
+system('git add *')
+system(sprintf('git commit -m "publish release %s"', version))
+system('git push')
+
 cmd = "gh release create %s --title %s --notes-file %s";
 cmd = sprintf(cmd, version, title, changelogFile);
 [status, cmdout] = system(cmd);
