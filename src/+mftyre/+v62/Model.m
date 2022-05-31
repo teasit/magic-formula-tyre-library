@@ -1,6 +1,6 @@
 classdef Model < mftyre.Model
     properties
-        Parameters mftyre.v62.Parameters
+        Parameters mftyre.v62.Parameters = mftyre.v62.Parameters()
         Description string
         File char
         Version
@@ -22,24 +22,29 @@ classdef Model < mftyre.Model
             };
     end
     methods
-        function mdl = Model(description)
+        function mdl = Model(file)
             arguments
-                description string = string.empty
+                file char = char.empty
             end
-            mdl.Description = description;
-            mdl.Parameters = mftyre.v62.Parameters();
+            if ~isempty(file)
+                mustBeFile(file)
+                mdl.importTyrePropertiesFile(file);
+            end
         end
-        
+        function [Fx,Fy,mux,muy] = eval(mdl,slipangl,longslip,inclangl,...
+                pressure,tyreNormF,tyreSide)
+            params = struct(mdl.Parameters);
+            [Fx,Fy,mux,muy] = mftyre.v62.eval(params,...
+                slipangl,longslip,inclangl,pressure,tyreNormF,tyreSide);
+        end
         function value = get.Version(mdl)
             value = mdl.Parameters.FITTYP.Value;
         end
-        
         function importTyrePropertiesFile(mdl, fileName)
             reader = tir.TyrePropertiesFileReader();
             mdl.Parameters = reader.parse(fileName);
             mdl.File = fileName;
         end
-        
         function exportTyrePropertiesFile(mdl, fileName)
             fprintf("\nPrinting model parameters to '%s'...\n\n",fileName)
             p = mdl.Parameters;
