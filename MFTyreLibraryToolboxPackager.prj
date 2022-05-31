@@ -7,7 +7,7 @@
     <param.summary>Create and evaluate Magic Formula tyre models suitable for code generation in MATLAB.</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\MFTyreLibrary_PackageImage.png</param.screenshot>
-    <param.version>1.0.5</param.version>
+    <param.version>1.1.0</param.version>
     <param.output>${PROJECT_ROOT}\MFTyreLibrary.mltbx</param.output>
     <param.products.name />
     <param.products.id />
