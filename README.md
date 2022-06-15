@@ -1,21 +1,19 @@
 # Magic Formula Tyre Library
 
-[![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955-mftyrelibrary)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/mftyre-matlab-library)](https://github.com/teasit/mftyre-matlab-library/releases/latest)
-
-![Social Preview Image](./doc/images/tyre_icon_socialpreview.png)
+[![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/magic-formula-tyre-library)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
 
 ```matlab
 [Fx,Fy] = magicformula.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
 ```
 
-- Computationally efficient MF-Tyre functions
+- Computationally efficient Magic Formula tyre model functions
 - Code generation compatible
-- Automatically fit MF-Tyre models to data
+- Automatically fit Magic Formula tyre models to data
 - TIR import/export (Tyre Property File format)
 - TYDEX import (Tyre Data Exchange format)
 
-![Fitting Example](doc/images/mftyrelib_fit_example.png)
+![Fitting Example](doc/images/fit_example.png)
 
 ## Requirements
 
@@ -28,7 +26,7 @@
 There are several ways:
 
 - Download latest Release from [MATLAB File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/110955)
-- Download latest Release from [GitHub](https://github.com/teasit/mftyre-matlab-library/releases)
+- Download latest Release from [GitHub](https://github.com/teasit/magic-formula-tyre-library/releases)
 - Clone using Git and integrate into your projects using a [Project Reference](https://de.mathworks.com/help/simulink/ug/add-or-remove-a-reference-to-another-project.html)
 
 ## Usage and Examples
@@ -39,11 +37,11 @@ To get started with interactive examples, open the MATLAB live script
 You can find further examples in the  [`doc/examples`](./doc/examples) folder.
 
 I also created an open-source GUI application in MATLAB for interactive fitting
-of MF-Tyre models to measurement data.
+of Magic Formula tyre models to measurement data.
 It uses this library as a submodule, meaning that fitted parameter sets with the GUI can
 be used with the equations provided by this CLI library.
 You can find it here:
-[MF-Tyre MATLAB Tool](https://github.com/teasit/mftyre-matlab-tool)!
+[Link to GUI](https://github.com/teasit/magic-formula-tyre-tool)!
 
 ## Motivation
 
@@ -77,7 +75,7 @@ de-identified and obscured data for demonstration purposes.
 
 ## Known Issues, Notes and Bugs
 
-- Currently only MFTyre version 6.1.2 (62) is implemented
+- Currently only Magic Formula version 6.1.2 (62) is implemented
 - Of v6.1.2 the turn slip parameters have been reduced to constant parameters
   (noted by greek letter zeta in Pacejka's book). To remove the influence of
   these parameters, simply set them to unity (=1). The default parameter
@@ -86,5 +84,4 @@ de-identified and obscured data for demonstration purposes.
   friction coefficient) to remove dependency on speed as input. Might be
   added as an alternative implementation in the future.
 - In some sub-equations a few scaling factors were not implemented
-  (as they could not be attributed to a parameter in the MFTyre/MFSwift manual).
 - Self-aligning torque is not calculated/implemented (MZW).
