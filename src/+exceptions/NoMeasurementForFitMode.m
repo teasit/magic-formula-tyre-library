@@ -4,7 +4,7 @@ classdef NoMeasurementForFitMode < MException
             arguments
                 fitmode char
             end
-            errId = 'MFTyreLibrary:NoMeasurementForFitMode';
+            errId = 'MagicFormulaTyreLibrary:NoMeasurementForFitMode';
             msgtext = sprintf(...
                 'Measurement has no data for fit-mode "%s".', fitmode);
             obj@MException(errId, msgtext)

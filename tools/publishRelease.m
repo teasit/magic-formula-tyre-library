@@ -1,16 +1,22 @@
-function publishReleaseMFTyreLibrary(version, title, changelogFile, packageFile, packagerFile)
-%PUBLISHRELEASEMFTYRELIBRARY Automatic release to GitHub
+function publishRelease(version, title, changelogFile, packageFile, packagerFile)
+%PUBLISHRELEASE Automatic release to GitHub
 arguments
     version char
     title char = char.empty
     changelogFile char {mustBeFile} = 'CHANGELOG.md'
-    packageFile char = 'MFTyreLibrary.mltbx'
-    packagerFile char = 'MFTyreLibraryToolboxPackager.prj'
+    packageFile char = 'MagicFormulaTyreLibrary.mltbx'
+    packagerFile char = 'ToolboxPackager.prj'
 end
 pattern = 'v' + digitsPattern() + '.' + digitsPattern() + '.' + digitsPattern();
 versionInvalid = ~matches(version, pattern);
 if versionInvalid
     error('Invalid version pattern. Example: v1.0.1')
+end
+
+results = runtests('OutputDetail', 0);
+failed = [results.Failed];
+if any(failed)
+    error('Unit Tests failed. Aborted release publish')
 end
 
 matlab.addons.toolbox.toolboxVersion(packagerFile, erase(version, 'v'));

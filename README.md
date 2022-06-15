@@ -1,12 +1,12 @@
-# MF-Tyre MATLAB Library
+# Magic Formula Tyre Library
 
-[![View MFTyreLibrary on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955-mftyrelibrary)
+[![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955-mftyrelibrary)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/mftyre-matlab-library)](https://github.com/teasit/mftyre-matlab-library/releases/latest)
 
 ![Social Preview Image](./doc/images/tyre_icon_socialpreview.png)
 
 ```matlab
-[Fx,Fy] = mftyre.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
+[Fx,Fy] = magicformula.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
 ```
 
 - Computationally efficient MF-Tyre functions
@@ -15,7 +15,7 @@
 - TIR import/export (Tyre Property File format)
 - TYDEX import (Tyre Data Exchange format)
 
-![MF-Tyre Fitting Example](doc/images/mftyrelib_fit_example.png)
+![Fitting Example](doc/images/mftyrelib_fit_example.png)
 
 ## Requirements
 

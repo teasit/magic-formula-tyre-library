@@ -1,6 +1,6 @@
-classdef Model < mftyre.Model
+classdef Model < magicformula.Model
     properties
-        Parameters mftyre.v62.Parameters = mftyre.v62.Parameters()
+        Parameters magicformula.v62.Parameters = magicformula.v62.Parameters()
         Description string
         File char
         Version
@@ -34,7 +34,7 @@ classdef Model < mftyre.Model
         function [Fx,Fy,mux,muy] = eval(mdl,slipangl,longslip,inclangl,...
                 pressure,tyreNormF,tyreSide)
             params = struct(mdl.Parameters);
-            [Fx,Fy,mux,muy] = mftyre.v62.eval(params,...
+            [Fx,Fy,mux,muy] = magicformula.v62.eval(params,...
                 slipangl,longslip,inclangl,pressure,tyreNormF,tyreSide);
         end
         function value = get.Version(mdl)

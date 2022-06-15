@@ -4,7 +4,7 @@ classdef TyrePropertiesFileReader < handle
     
     properties
         FullFilePath char = char.empty
-        ModelParameters mftyre.v62.Parameters = mftyre.v62.Parameters.empty
+        ModelParameters magicformula.v62.Parameters = magicformula.v62.Parameters.empty
     end
     
     methods (Access = private, Static)
@@ -53,7 +53,7 @@ classdef TyrePropertiesFileReader < handle
             paramNames = scan{1};
             paramValues = scan{2};
             
-            params_ = mftyre.v62.Parameters;
+            params_ = magicformula.v62.Parameters;
             numParams = numel(paramNames);
             clear errors
             errors(1:numParams) = exceptions.UnknownModelParameter('');

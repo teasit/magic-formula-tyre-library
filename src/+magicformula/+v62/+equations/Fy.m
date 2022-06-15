@@ -1,5 +1,5 @@
 function [Fy,muy,Gyk,Byk,Eyk] = Fy(p,slipangl,longslip,inclangl,pressure,Fz)
-[Fy0,muy,dfz] = mftyre.v62.equations.Fy0(p,slipangl,inclangl,pressure,Fz);
+[Fy0,muy,dfz] = magicformula.v62.equations.Fy0(p,slipangl,inclangl,pressure,Fz);
 
 % (4.E4)
 camberspin = sin(inclangl);

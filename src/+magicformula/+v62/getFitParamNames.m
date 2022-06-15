@@ -5,16 +5,16 @@ function names = getFitParamNames(fitmode)
 % the combined slip conditions are fitted (Fx, Fy).
 %
 % Inputs:
-%   - fitmode   (mftyre.v62.FitMode)
+%   - fitmode   (magicformula.v62.FitMode)
 %
 % Outputs:
 %   - names     (cell array of chars)
 %
 arguments
-    fitmode mftyre.v62.FitMode
+    fitmode magicformula.v62.FitMode
 end
 
-import('mftyre.v62.FitMode')
+import('magicformula.v62.FitMode')
 
 names = {};
 switch fitmode

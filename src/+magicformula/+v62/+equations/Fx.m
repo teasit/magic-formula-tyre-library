@@ -1,5 +1,5 @@
 function [Fx,mux,Gxa,Bxa,Exa] = Fx(p,slipangl,longslip,inclangl,pressure,Fz)
-[Fx0,mux] = mftyre.v62.equations.Fx0(p,longslip,inclangl,pressure,Fz);
+[Fx0,mux] = magicformula.v62.equations.Fx0(p,longslip,inclangl,pressure,Fz);
 
 % (4.E1)
 FNOMIN = p.FNOMIN.*p.LFZO;

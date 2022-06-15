@@ -1,14 +1,15 @@
 classdef Fitter < handle
-    %MFTYRE.V62.FITTER Fits MF-Tyre models to measurement data.
+    %FITTER Fits Magic Formula tyre models to measurement data.
+    
     properties
         %Set the measurements to be used for fitting.
         Measurements tydex.Measurement
         
         %Set the initial parameter to be used for fitting.
-        Parameters mftyre.v62.Parameters
+        Parameters magicformula.v62.Parameters
         
         %Set the Fit-Modes to execute when using run() method.
-        FitModes mftyre.v62.FitMode
+        FitModes magicformula.v62.FitMode
         
         %Solver options. Set max iterations, function evaluations etc.
         Options optim.options.SolverOptions = optimoptions('fmincon', ...
@@ -16,7 +17,7 @@ classdef Fitter < handle
     end
     properties (SetAccess = protected)
         %Fitted parameter values, updated after each Fit-Mode solve.
-        ParametersFitted mftyre.v62.Parameters
+        ParametersFitted magicformula.v62.Parameters
         
         %Input fitmode name, map will return index array for measurements.
         FitModeFlags containers.Map
@@ -26,7 +27,7 @@ classdef Fitter < handle
         %In case the "OutputFcn" property in the Fitter options is used,
         %the user can make use of the ActiveFitMode property to print the
         %current equation being fitted, for example.
-        ActiveFitMode mftyre.v62.FitMode
+        ActiveFitMode magicformula.v62.FitMode
     end
     properties (Access = private)
     end
@@ -47,9 +48,9 @@ classdef Fitter < handle
     methods
         function run(fitter)
             %RUN Fits all modes specified in "FitModes" property.
-            import mftyre.v62.FitMode
+            import magicformula.v62.FitMode
             warning('off', 'MATLAB:nearlySingularMatrix')
-            fprintf('Starting MF-Tyre fitter...\n')
+            fprintf('Starting fitter...\n')
             fitmodes = fitter.FitModes;
             fitter.ParametersFitted = fitter.Parameters;
             for i = 1:numel(fitmodes)
@@ -73,7 +74,7 @@ classdef Fitter < handle
         function fitter = Fitter(measurements, parameters)
             arguments
                 measurements tydex.Measurement = tydex.Measurement.empty
-                parameters mftyre.v62.Parameters = mftyre.v62.Parameters.empty
+                parameters magicformula.v62.Parameters = magicformula.v62.Parameters.empty
             end
             fitter.Measurements = measurements;
             fitter.Parameters = parameters;
@@ -83,10 +84,10 @@ classdef Fitter < handle
         function x = solve(fitter,fitmode)
             %SOLVE Fit model only for one fitmode.
             arguments
-                fitter  mftyre.v62.Fitter
-                fitmode mftyre.v62.FitMode
+                fitter  magicformula.v62.Fitter
+                fitmode magicformula.v62.FitMode
             end
-            import('mftyre.v62.FitMode')
+            import('magicformula.v62.FitMode')
             fitter.ActiveFitMode = fitmode;
             
             measurements = fitter.Measurements;
@@ -142,7 +143,7 @@ classdef Fitter < handle
             
             numMeas = numel(measurements);
             
-            modes = enumeration(mftyre.v62.FitMode.Fy0);
+            modes = enumeration(magicformula.v62.FitMode.Fy0);
             keys = cell(numel(modes),1);
             for i = 1:numel(modes)
                 keys{i} = char(modes(i));
@@ -156,7 +157,7 @@ classdef Fitter < handle
                 I = strcmp({const.Name},'SLIPANGL');
                 idx(i) = any(I) && abs(const(I).Value) <= deg2rad(0.3);
             end
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Fx0)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fx0)),1);
             vals{key} = find(idx);
             
             % Fy0 + Mz0
@@ -166,9 +167,9 @@ classdef Fitter < handle
                 I = strcmp({const.Name},'LONGSLIP');
                 idx(i) = any(I) && abs(const(I).Value) <= 0.005;
             end
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Fy0)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fy0)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Mz0)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Mz0)),1);
             vals{key} = find(idx);
             
             % Mz + Fx + Fy + Fz + Mx + My (Combined Slip)
@@ -180,17 +181,17 @@ classdef Fitter < handle
                 idx(i) = ~(any(I1) && const(I1).Value == 0) ...
                     || (any(I2) && const(I2).Value == 0);
             end
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Mz)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Mz)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Fx)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fx)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Fy)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fy)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Mx)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Mx)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.My)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.My)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(mftyre.v62.FitMode.Fz)),1);
+            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fz)),1);
             vals{key} = find(idx);
             
             fitModeFlagsMap = containers.Map(keys,vals);
@@ -202,16 +203,16 @@ classdef Fitter < handle
             %COSTFUN Summed squares cost function for fmincon solver.
             arguments
                 x        double
-                params   mftyre.v62.Parameters
+                params   magicformula.v62.Parameters
                 mfinputs double
                 testdata double
-                fitmode  mftyre.v62.FitMode
+                fitmode  magicformula.v62.FitMode
             end
-            import('mftyre.v62.FitMode')
-            import('mftyre.v62.equations.Fx0')
-            import('mftyre.v62.equations.Fy0')
-            import('mftyre.v62.equations.Fx')
-            import('mftyre.v62.equations.Fy')
+            import('magicformula.v62.FitMode')
+            import('magicformula.v62.equations.Fx0')
+            import('magicformula.v62.equations.Fy0')
+            import('magicformula.v62.equations.Fx')
+            import('magicformula.v62.equations.Fy')
             
             params = appendFitted(params,x,fitmode);
             params = struct(params);
@@ -260,12 +261,12 @@ classdef Fitter < handle
             %CONSTRAINTS Constraints for fmincon solver.
             arguments
                 x double
-                params mftyre.v62.Parameters
-                fitmode mftyre.v62.FitMode
+                params magicformula.v62.Parameters
+                fitmode magicformula.v62.FitMode
                 mfinputs double
             end
             c = []; ceq = [];
-            import('mftyre.v62.FitMode')
+            import('magicformula.v62.FitMode')
             params = appendFitted(params,x,fitmode);
             params = struct(params);
             longslip = mfinputs(:,2);
@@ -275,19 +276,19 @@ classdef Fitter < handle
             Fz = mfinputs(:,1);
             switch fitmode
                 case FitMode.Fx0
-                    [~,~,Cx,Dx,Ex] = mftyre.v62.equations.Fx0(params,...
+                    [~,~,Cx,Dx,Ex] = magicformula.v62.equations.Fx0(params,...
                         longslip,inclangl,pressure,Fz);
                     c = [-Cx+eps;-Dx+eps;Ex-1];
                 case FitMode.Fy0
-                    [~,~,~,Cy,Ey] = mftyre.v62.equations.Fy0(params,...
+                    [~,~,~,Cy,Ey] = magicformula.v62.equations.Fy0(params,...
                         slipangl,inclangl,pressure,Fz);
                     c = [-Cy+eps;Ey-1];
                 case FitMode.Fx
-                    [~,~,Gxa,Bxa,Exa] = mftyre.v62.equations.Fx(params,...
+                    [~,~,Gxa,Bxa,Exa] = magicformula.v62.equations.Fx(params,...
                         slipangl,longslip,inclangl,pressure,Fz);
                     c = [-Gxa+eps;-Bxa+eps;Exa-1];
                 case FitMode.Fy
-                    [~,~,Gyk,Byk,Eyk] = mftyre.v62.equations.Fy(params,...
+                    [~,~,Gyk,Byk,Eyk] = magicformula.v62.equations.Fy(params,...
                         slipangl,longslip,inclangl,pressure,Fz);
                     c = [-Gyk+eps;-Byk+eps;Eyk-1];
                 case FitMode.Mz0

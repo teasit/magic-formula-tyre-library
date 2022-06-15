@@ -7,7 +7,7 @@ classdef UnknownModelParameter < MException
             arguments
                 name char
             end
-            errId = 'MFTyreLibrary:UnknownModelParameter';
+            errId = 'MagicFormulaTyreLibrary:UnknownModelParameter';
             msgtext = sprintf('Unknown parameter name "%s".', name);
             obj@MException(errId, msgtext)
             obj.ParameterName = name;

@@ -1,8 +1,8 @@
 function [Fx,Fy,mux,muy] = eval(params,slipangl,longslip,inclangl,...
     pressure,tyreNormF,tyreSide)
-% EVAL Evaluates mftyre parameter set and calculates tyre forces.
+% EVAL Evaluates magic formula parameter set and calculates tyre forces.
 % This function serves as a convenience function to avoid calling the
-% respective MFTyre equations directly (Fx0/Fy0/Fx/Fy...).
+% respective Magic Formula sub-equations directly (Fx0/Fy0/Fx/Fy...).
 % In case the tyre is mounted on a side other than it was tested on,
 % the FYW forces are mirrored assuming skew-symmetry.
 %
@@ -12,9 +12,7 @@ function [Fx,Fy,mux,muy] = eval(params,slipangl,longslip,inclangl,...
 %   Also, the equations for FZ and MZ are not implemented.
 %
 % Inputs:
-%   - params    MFTyre parameters passed as a struct or class with property
-%               names that correspond to the parameter names as specifed by
-%               the MFTyre/MFSwift manual.
+%   - params    Magic Formula parameters passed as a struct.
 %   - slipangl  Slip angle in radians as defined by DIN ISO 8855.
 %   - longslip  Slip ratio (unitless) as defined by DIN ISO 8855.
 %   - inclangl  Inclination angle in radians as defined by DIN ISO 8855.
@@ -39,9 +37,9 @@ function [Fx,Fy,mux,muy] = eval(params,slipangl,longslip,inclangl,...
 narginchk(7,7)
 mirrorCurve = tyreSide ~= params.TYRESIDE;
 slipangl = (-1).^mirrorCurve.*slipangl;
-[Fx,mux] = mftyre.v62.equations.Fx(params,...
+[Fx,mux] = magicformula.v62.equations.Fx(params,...
     slipangl,longslip,inclangl,pressure,tyreNormF);
-[Fy,muy] = mftyre.v62.equations.Fy(params,...
+[Fy,muy] = magicformula.v62.equations.Fy(params,...
     slipangl,longslip,inclangl,pressure,tyreNormF);
 Fy = (-1).^mirrorCurve.*Fy;
 end

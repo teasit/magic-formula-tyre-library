@@ -1,4 +1,4 @@
-classdef ParameterFittable < mftyre.v62.Parameter
+classdef ParameterFittable < magicformula.v62.Parameter
     properties
         Min double
         % Minimum value the optimizer will set
@@ -6,7 +6,7 @@ classdef ParameterFittable < mftyre.v62.Parameter
         % Maximum value the optimizer will set
         Fixed logical
         % If parameter is FIXED, it will not be considered by optimizer
-        % while fitting the MFTyre model to the data
+        % while fitting the tyre model to the data
     end
     methods
         function param = ParameterFittable(value,min,max,desc,fixd)
@@ -25,7 +25,7 @@ classdef ParameterFittable < mftyre.v62.Parameter
         end
         function param = set.Fixed(param,tf)
             arguments
-                param mftyre.v62.ParameterFittable
+                param magicformula.v62.ParameterFittable
                 tf logical
             end
             param.Fixed = tf;

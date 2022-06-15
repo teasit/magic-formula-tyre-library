@@ -4,7 +4,7 @@ classdef FitterFailed < MException
             arguments
                 fitmode char
             end
-            errId = 'MFTyreLibrary:FitterFailed';
+            errId = 'MagicFormulaTyreLibrary:FitterFailed';
             msgtext = sprintf('Fitter failed to solve fit-mode "%s".', fitmode);
             obj@MException(errId, msgtext)
         end
