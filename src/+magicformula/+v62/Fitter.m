@@ -129,6 +129,7 @@ classdef Fitter < handle
             % which fit-mode. For example, data which only includes
             % slip-free slip angle sweeps can only be used to fit Fy0.
             %
+            import magicformula.v62.FitMode
             measurements = fitter.Measurements;
             
             if isempty(measurements)
@@ -137,7 +138,7 @@ classdef Fitter < handle
             
             numMeas = numel(measurements);
             
-            modes = enumeration(magicformula.v62.FitMode.Fy0);
+            modes = enumeration('magicformula.v62.FitMode');
             keys = cell(numel(modes),1);
             for i = 1:numel(modes)
                 keys{i} = char(modes(i));
@@ -151,7 +152,7 @@ classdef Fitter < handle
                 I = strcmp({const.Name},'SLIPANGL');
                 idx(i) = any(I) && abs(const(I).Value) <= deg2rad(0.3);
             end
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fx0)),1);
+            key = find(strcmp(keys,char(FitMode.Fx0)),1);
             vals{key} = find(idx);
             
             % Fy0 + Mz0
@@ -161,9 +162,9 @@ classdef Fitter < handle
                 I = strcmp({const.Name},'LONGSLIP');
                 idx(i) = any(I) && abs(const(I).Value) <= 0.005;
             end
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fy0)),1);
+            key = find(strcmp(keys,char(FitMode.Fy0)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Mz0)),1);
+            key = find(strcmp(keys,char(FitMode.Mz0)),1);
             vals{key} = find(idx);
             
             % Mz + Fx + Fy + Fz + Mx + My (Combined Slip)
@@ -175,17 +176,17 @@ classdef Fitter < handle
                 idx(i) = ~(any(I1) && const(I1).Value == 0) ...
                     || (any(I2) && const(I2).Value == 0);
             end
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Mz)),1);
+            key = find(strcmp(keys,char(FitMode.Mz)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fx)),1);
+            key = find(strcmp(keys,char(FitMode.Fx)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fy)),1);
+            key = find(strcmp(keys,char(FitMode.Fy)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Mx)),1);
+            key = find(strcmp(keys,char(FitMode.Mx)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.My)),1);
+            key = find(strcmp(keys,char(FitMode.My)),1);
             vals{key} = find(idx);
-            key = find(strcmp(keys,char(magicformula.v62.FitMode.Fz)),1);
+            key = find(strcmp(keys,char(FitMode.Fz)),1);
             vals{key} = find(idx);
             
             fitModeFlagsMap = containers.Map(keys,vals);
