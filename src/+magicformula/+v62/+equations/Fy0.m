@@ -1,12 +1,12 @@
-function [Fy0,muy,dfz,Cy,Ey,Dy] = Fy0(p,slipangl,inclangl,pressure,Fz)
+function [Fy0,muy,Fz0,dfz,dpi,By,Cy,Ey,Dy,Kya,SVy,SHy] = Fy0(p,slipangl,inclangl,pressure,Fz)
 % (4.E4)
 inclangl = sin(inclangl);
 
 % (4.E1)
-FNOMIN = p.FNOMIN.*p.LFZO;
+Fz0 = p.FNOMIN.*p.LFZO;
 
 % (4.E2a) 
-dfz = (Fz-FNOMIN)./FNOMIN;
+dfz = (Fz-Fz0)./Fz0;
 
 % (4.E2b) 
 dpi = (pressure-p.NOMPRES)./p.NOMPRES;
@@ -22,7 +22,7 @@ Dy = muy.*Fz*p.ZETA2;
 
 % (4.E25)
 % TODO: add correct LAMBDA (scaling factor)
-Kya = p.ZETA3*p.PKY1.*FNOMIN.*(1+p.PPY1.*dpi).*(1-p.PKY3.*abs(inclangl)).*sin(p.PKY4.*atan(Fz./FNOMIN./((p.PKY2+p.PKY5.*inclangl.^2).*(1+p.PPY2.*dpi))));
+Kya = p.ZETA3*p.PKY1.*Fz0.*(1+p.PPY1.*dpi).*(1-p.PKY3.*abs(inclangl)).*sin(p.PKY4.*atan(Fz./Fz0./((p.PKY2+p.PKY5.*inclangl.^2).*(1+p.PPY2.*dpi))));
 
 % (4.E28)
 % TODO: add correct LAMBDA (scaling factor)

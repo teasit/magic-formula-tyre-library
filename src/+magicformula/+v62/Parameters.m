@@ -248,7 +248,7 @@ classdef Parameters
         QBZ3                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Variation of slope Bpt with load squared')
         QBZ4                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Variation of slope Bpt with camber')
         QBZ5                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Variation of slope Bpt with absolute camber')
-        QBZ9                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Slope factor Br of residual torque Mzr')
+        QBZ9                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Slope factor Br of residual torque Mzr', true)
         QBZ10                   = magicformula.v62.ParameterFittable(0, -inf, inf, 'Slope factor Br of residual torque Mzr')
         QCZ1                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Shape factor Cpt for pneumatic trail')
         QDZ1                    = magicformula.v62.ParameterFittable(0, -inf, inf, 'Peak trail Dpt"=Dpt*(Fz/Fznom*R0)')
