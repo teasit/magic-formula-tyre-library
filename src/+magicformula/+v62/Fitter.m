@@ -9,7 +9,7 @@ classdef Fitter < handle
         %Set the Fit-Modes to execute when using run() method.
         FitModes magicformula.v62.FitMode
         %Solver options. Set max iterations, function evaluations etc.
-        Options optim.options.SolverOptions = optimoptions('fmincon', ...
+        Options optim.options.Fmincon = optimoptions('fmincon', ...
             'Display', 'iter-detailed')
     end
     properties (SetAccess = protected)
