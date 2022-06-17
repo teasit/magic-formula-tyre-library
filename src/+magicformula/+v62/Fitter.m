@@ -4,13 +4,10 @@ classdef Fitter < handle
     properties
         %Set the measurements to be used for fitting.
         Measurements tydex.Measurement
-        
         %Set the initial parameter to be used for fitting.
         Parameters magicformula.v62.Parameters
-        
         %Set the Fit-Modes to execute when using run() method.
         FitModes magicformula.v62.FitMode
-        
         %Solver options. Set max iterations, function evaluations etc.
         Options optim.options.SolverOptions = optimoptions('fmincon', ...
             'Display', 'iter-detailed')
@@ -18,7 +15,6 @@ classdef Fitter < handle
     properties (SetAccess = protected)
         %Fitted parameter values, updated after each Fit-Mode solve.
         ParametersFitted magicformula.v62.Parameters
-        
         %Input fitmode name, map will return index array for measurements.
         FitModeFlags containers.Map
     end
@@ -28,8 +24,6 @@ classdef Fitter < handle
         %the user can make use of the ActiveFitMode property to print the
         %current equation being fitted, for example.
         ActiveFitMode magicformula.v62.FitMode
-    end
-    properties (Access = private)
     end
     methods
         function set.FitModes(fitter, fitmodes)
@@ -87,7 +81,7 @@ classdef Fitter < handle
                 fitter  magicformula.v62.Fitter
                 fitmode magicformula.v62.FitMode
             end
-            import('magicformula.v62.FitMode')
+            import magicformula.v62.FitMode
             fitter.ActiveFitMode = fitmode;
             
             measurements = fitter.Measurements;
@@ -113,7 +107,7 @@ classdef Fitter < handle
                 case {FitMode.Fy0, FitMode.Fy}
                     testdata = cat(1,measurements.FYW);
                 case FitMode.Mz0
-                    error('Not yet implemented')
+                    testdata = cat(1,measurements.MZW);
                 case FitMode.Mx
                     error('Not yet implemented')
                 case FitMode.My
@@ -208,11 +202,12 @@ classdef Fitter < handle
                 testdata double
                 fitmode  magicformula.v62.FitMode
             end
-            import('magicformula.v62.FitMode')
-            import('magicformula.v62.equations.Fx0')
-            import('magicformula.v62.equations.Fy0')
-            import('magicformula.v62.equations.Fx')
-            import('magicformula.v62.equations.Fy')
+            import magicformula.v62.FitMode
+            import magicformula.v62.equations.Fx0
+            import magicformula.v62.equations.Fy0
+            import magicformula.v62.equations.Fx
+            import magicformula.v62.equations.Fy
+            import magicformula.v62.equations.Mz0
             
             params = appendFitted(params,x,fitmode);
             params = struct(params);
@@ -244,13 +239,19 @@ classdef Fitter < handle
                     inclangl = mfinputs(:,4);
                     Fz       = mfinputs(:,1);
                     modelout = Fy(params,slipangl,longslip,inclangl,pressure,Fz);
+                case FitMode.Mz0
+                    slipangl = mfinputs(:,3);
+                    pressure = mfinputs(:,7);
+                    inclangl = mfinputs(:,4);
+                    Fz       = mfinputs(:,1);
+                    modelout = Mz0(params,slipangl,inclangl,pressure,Fz);
                 case FitMode.Fz
                     warning('Not implemented yet')
                 case FitMode.Mx
                     warning('Not implemented yet')
                 case FitMode.My
                     warning('Not implemented yet')
-                case {FitMode.Mz0, FitMode.Mz}
+                case FitMode.Mz
                     warning('Not implemented yet')
             end
             
@@ -265,8 +266,8 @@ classdef Fitter < handle
                 fitmode magicformula.v62.FitMode
                 mfinputs double
             end
+            import magicformula.v62.FitMode
             c = []; ceq = [];
-            import('magicformula.v62.FitMode')
             params = appendFitted(params,x,fitmode);
             params = struct(params);
             longslip = mfinputs(:,2);
@@ -292,7 +293,9 @@ classdef Fitter < handle
                         slipangl,longslip,inclangl,pressure,Fz);
                     c = [-Gyk+eps;-Byk+eps;Eyk-1];
                 case FitMode.Mz0
-                    warning('Constraints for Mz0 not yet implemented')
+                    [~,Bt,Ct,Et] = magicformula.v62.equations.Mz0(params,...
+                        slipangl,inclangl,pressure,Fz);
+                    c = [-Bt+eps;-Ct+eps;Et-1];
                 case FitMode.Mz
                     warning('Constraints for Mz not yet implemented')
                 case FitMode.Mx

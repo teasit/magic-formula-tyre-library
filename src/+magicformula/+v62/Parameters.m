@@ -382,8 +382,8 @@ classdef Parameters
                 params magicformula.v62.Parameters
                 fitmode magicformula.v62.FitMode
             end
-            import('magicformula.v62.FitMode')
-            import('magicformula.v62.getFitParamNames')
+            import magicformula.v62.FitMode
+            import magicformula.v62.getFitParamNames
             fn = fieldnames(params);
             fitparams = getFitParamNames(fitmode);
             allParamsExist = numel(intersect(fn,fitparams)) == numel(fitparams);
@@ -408,8 +408,8 @@ classdef Parameters
                 x double
                 fitmode magicformula.v62.FitMode
             end
-            import('magicformula.v62.FitMode')
-            import('magicformula.v62.getFitParamNames')
+            import magicformula.v62.FitMode
+            import magicformula.v62.getFitParamNames
             fitparams = getFitParamNames(fitmode);
             for i=1:numel(fitparams)
                 params.(fitparams{i}).Value = x(i);

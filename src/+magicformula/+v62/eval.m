@@ -1,4 +1,4 @@
-function [Fx,Fy,mux,muy] = eval(params,slipangl,longslip,inclangl,...
+function [Fx,Fy,Mz,mux,muy] = eval(params,slipangl,longslip,inclangl,...
     pressure,tyreNormF,tyreSide)
 % EVAL Evaluates magic formula parameter set and calculates tyre forces.
 % This function serves as a convenience function to avoid calling the
@@ -31,6 +31,7 @@ function [Fx,Fy,mux,muy] = eval(params,slipangl,longslip,inclangl,...
 % Outputs:
 %   - Fx        Longitudinal tyre force.
 %   - Fy        Lateral tyre force.
+%   - Mz        Self-aligning torque.
 %   - mux       Longitudinal tyre friction coefficient.
 %   - muy       Lateral tyre friction coefficient.
 %
@@ -41,6 +42,9 @@ slipangl = (-1).^mirrorCurve.*slipangl;
     slipangl,longslip,inclangl,pressure,tyreNormF);
 [Fy,muy] = magicformula.v62.equations.Fy(params,...
     slipangl,longslip,inclangl,pressure,tyreNormF);
+% todo: Mz0 temporarily in place of Mz
+Mz = magicformula.v62.equations.Mz0(params, ...
+    slipangl,inclangl,pressure,tyreNormF);
 Fy = (-1).^mirrorCurve.*Fy;
 end
 

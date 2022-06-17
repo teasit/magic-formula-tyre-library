@@ -1,6 +1,4 @@
-function Mz0 = Mz0(p,slipangl,inclangl,pressure,Fz)
-% todo: in fitter, implement restrictions for Bt, Ct > 0, Et <=1
-% todo: make qbZ9 = 0 fixed by default
+function [Mz0,Bt,Ct,Et] = Mz0(p,slipangl,inclangl,pressure,Fz)
 % todo: extend output arguments of Fy0
 
 % todo: implement this:
@@ -39,7 +37,9 @@ Dt0 = Fz.*(p.UNLOADED_RADIUS./Fz0).*(p.QDZ1+p.QDZ2.*dfz).*(1-p.PPZ1.*dpi).*p.LTR
 % (4.E40)
 % todo: check if correct scaling factor LKYC
 % todo: add asterisk version of LMUY
-Bt = (p.QBZ1 + p.QBZ2.*dfz + p.QBZ3.*dfz2).*(1+p.QBZ5.*abs(inclangl)+p.QBZ6.*inclangl2).*p.LKYC./p.LMUY;
+% todo: QBZ6 not in TIR?
+% Bt = (p.QBZ1 + p.QBZ2.*dfz + p.QBZ3.*dfz2).*(1+p.QBZ5.*abs(inclangl)+p.QBZ6.*inclangl2).*p.LKYC./p.LMUY;
+Bt = (p.QBZ1 + p.QBZ2.*dfz + p.QBZ3.*dfz2).*(1+p.QBZ5.*abs(inclangl)).*p.LKYC./p.LMUY;
 
 % (4.E41)
 Ct = p.QCZ1;
@@ -68,10 +68,10 @@ Dr = Fz.*p.UNLOADED_RADIUS.*((p.QDZ6+p.QDZ7.*dfz).*p.LMP.*p.ZETA2...
     .*p.LMUY.*sgnVcx.*cosa + p.ZETA8 - 1;
 
 % (4.E33)
-t0 = Dt.*cos(Ct.*atan(Bt.*at-Et.*(Bt.*at-atan(Bt.*at))))*cosa;
+t0 = Dt.*cos(Ct.*atan(Bt.*at-Et.*(Bt.*at-atan(Bt.*at)))).*cosa;
 
 % (4.E32)
-Mz0_ = -t0*Fy0;
+Mz0_ = -t0.*Fy0;
 
 % (4.E36)
 Mzr0 = Dr.*cos(Cr.*atan(Br.*ar)).*cosa;
