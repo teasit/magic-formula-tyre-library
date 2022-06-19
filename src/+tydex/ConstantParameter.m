@@ -1,4 +1,4 @@
-classdef ConstantParameter < tydex.Parameter
+classdef (Hidden) ConstantParameter < tydex.Parameter
     properties
         Unit    char
         Value

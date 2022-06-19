@@ -1,12 +1,12 @@
-classdef ParameterFittable < magicformula.v62.Parameter
+classdef (Hidden) ParameterFittable < magicformula.v62.Parameter
     properties
-        Min double
         % Minimum value the optimizer will set
-        Max double
+        Min double
         % Maximum value the optimizer will set
-        Fixed logical
+        Max double
         % If parameter is FIXED, it will not be considered by optimizer
         % while fitting the tyre model to the data
+        Fixed logical
     end
     methods
         function param = ParameterFittable(value,min,max,desc,fixd)

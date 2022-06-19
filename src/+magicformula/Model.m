@@ -1,4 +1,4 @@
-classdef (Abstract) Model < matlab.mixin.Copyable
+classdef (Abstract, Hidden) Model < matlab.mixin.Copyable
     properties (Abstract)
         Parameters magicformula.v62.Parameters
         File char

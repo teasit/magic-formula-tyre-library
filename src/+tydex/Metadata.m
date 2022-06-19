@@ -1,4 +1,4 @@
-classdef Metadata < tydex.Parameter
+classdef (Hidden) Metadata < tydex.Parameter
     properties
         Value
     end

@@ -1,4 +1,4 @@
-classdef Parameters
+classdef (Hidden) Parameters
     %PARAMETERS Magic Formula 6.1.2 parameter set.
     % Parameter names implemented according to:
     %   https://functionbay.com/documentation/onlinehelp/Documents/Tire/MFTyre-MFSwift_Help.pdf
@@ -383,7 +383,6 @@ classdef Parameters
                 fitmode magicformula.v62.FitMode
             end
             import magicformula.v62.FitMode
-            import magicformula.v62.getFitParamNames
             fn = fieldnames(params);
             fitparams = getFitParamNames(fitmode);
             allParamsExist = numel(intersect(fn,fitparams)) == numel(fitparams);
@@ -409,7 +408,6 @@ classdef Parameters
                 fitmode magicformula.v62.FitMode
             end
             import magicformula.v62.FitMode
-            import magicformula.v62.getFitParamNames
             fitparams = getFitParamNames(fitmode);
             for i=1:numel(fitparams)
                 params.(fitparams{i}).Value = x(i);

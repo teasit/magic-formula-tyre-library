@@ -1,4 +1,4 @@
-classdef MeasuredParameter < tydex.Parameter
+classdef (Hidden) MeasuredParameter < tydex.Parameter
     properties (Access = public)
         Unit        char
         Factor      single

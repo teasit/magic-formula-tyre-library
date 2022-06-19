@@ -1,4 +1,4 @@
-classdef (Abstract) Parameter
+classdef (Abstract, Hidden) Parameter
     properties (Access = public)
         Name    char
         Desc    char

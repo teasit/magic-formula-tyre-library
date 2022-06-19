@@ -1,4 +1,4 @@
-classdef Parameter
+classdef (Hidden) Parameter
     properties
         Description string
         Value
