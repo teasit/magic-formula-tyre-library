@@ -1,4 +1,4 @@
-classdef EmptyMeasurement < MException
+classdef (Hidden) EmptyMeasurement < MException
     methods
         function obj = EmptyMeasurement()
             errId = 'MagicFormulaTyreLibrary:EmptyMeasurement';

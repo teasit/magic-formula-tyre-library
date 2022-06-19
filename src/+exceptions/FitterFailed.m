@@ -1,4 +1,4 @@
-classdef FitterFailed < MException
+classdef (Hidden) FitterFailed < MException
     methods
         function obj = FitterFailed(fitmode)
             arguments

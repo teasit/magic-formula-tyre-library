@@ -1,4 +1,4 @@
-classdef NoMeasurementForFitMode < MException
+classdef (Hidden) NoMeasurementForFitMode < MException
     methods
         function obj = NoMeasurementForFitMode(fitmode)
             arguments

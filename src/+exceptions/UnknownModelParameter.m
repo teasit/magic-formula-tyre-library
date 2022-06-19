@@ -1,4 +1,4 @@
-classdef UnknownModelParameter < MException
+classdef (Hidden) UnknownModelParameter < MException
     properties
         ParameterName char
     end
