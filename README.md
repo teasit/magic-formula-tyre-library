@@ -2,6 +2,8 @@
 
 [![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/magic-formula-tyre-library)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
+[![GitHub downloads](https://img.shields.io/github/downloads/teasit/magic-formula-tyre-library/total)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
+
 
 ```matlab
 [Fx,Fy] = magicformula.v62.eval(p,slipangl,longslip,inclangl,inflpres,FZW,tyreSide)
@@ -13,7 +15,7 @@
 - TIR import/export (Tyre Property File format)
 - TYDEX import (Tyre Data Exchange format)
 
-![Fitting Example](doc/images/fit_example.png)
+![Fitting Example](doc/images/magic_formula_library_socialpreview.png)
 
 ## Requirements
 
