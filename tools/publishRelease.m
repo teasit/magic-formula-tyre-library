@@ -1,4 +1,4 @@
-function publishRelease(version, title, changelogFile, packageFile, packagerFile)
+function publishRelease(version, title, changelogFile, packageFile, packagerFile, repository)
 %PUBLISHRELEASE Automatic release to GitHub
 arguments
     version char
@@ -6,13 +6,20 @@ arguments
     changelogFile char {mustBeFile} = 'CHANGELOG.md'
     packageFile char = 'MagicFormulaTyreLibrary.mltbx'
     packagerFile char = 'ToolboxPackager.prj'
+    repository char = 'teasit/magic-formula-tyre-library'
 end
 pattern = 'v' + digitsPattern() + '.' + digitsPattern() + '.' + digitsPattern();
 versionInvalid = ~matches(version, pattern);
 if versionInvalid
     error('Invalid version pattern. Example: v1.0.1')
 end
-
+webquery = sprintf('https://api.github.com/repos/%s/releases/latest', repository);
+versionLatest = webread(webquery).tag_name;
+versionExists = strcmp(versionLatest, version);
+if versionExists
+    error('Latest release version and argument ''version'' are the same.')
+end
+    
 results = runtests('OutputDetail', 0);
 failed = [results.Failed];
 if any(failed)
@@ -24,6 +31,13 @@ matlab.addons.toolbox.packageToolbox(packagerFile);
 
 if isempty(title)
     title = version;
+end
+
+prompt = 'Do you really want to push to remote? [yes]: ';
+response = input(prompt, 's');
+if ~strcmp(response, 'yes')
+    warning('Publication of release aborted.')
+    return
 end
 
 system('git add *')

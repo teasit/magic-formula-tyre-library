@@ -1,50 +1,49 @@
-function [Fx,Fy,Mz,mux,muy] = eval(params,slipangl,longslip,inclangl,...
-    pressure,tyreNormF,tyreSide)
+function [Fx,Fy,Mz,mux,muy] = eval(p,SX,SA,IA,FZ,VX,IP,usemode)
 % EVAL Evaluates magic formula parameter set and calculates tyre forces.
 % This function serves as a convenience function to avoid calling the
 % respective Magic Formula sub-equations directly (Fx0/Fy0/Fx/Fy...).
 % In case the tyre is mounted on a side other than it was tested on,
 % the FYW forces are mirrored assuming skew-symmetry.
 %
-% Note:
-%   Currently, equations (4.E7) and (4.E8) are ignored, the scaling factor
-%   for the tyre friction coefficient does not change depending on speeed.
-%   Also, the equations for FZ and MZ are not implemented.
-%
 % Inputs:
-%   - params    Magic Formula parameters passed as a struct.
-%   - slipangl  Slip angle in radians as defined by DIN ISO 8855.
-%   - longslip  Slip ratio (unitless) as defined by DIN ISO 8855.
-%   - inclangl  Inclination angle in radians as defined by DIN ISO 8855.
-%   - pressure  Tyre inflation pressure in pascal as defined by DIN ISO
-%               8855.
-%   - tyreNormF Tyre normal force (FZW) in newton as defined by DIN ISO
+%   - p         Magic Formula parameters passed as a struct.
+%   - SX [1]    Slip ratio (unitless) as defined by DIN ISO 8855.
+%   - SA [rad]  Slip angle in radians as defined by DIN ISO 8855.
+%   - IA [rad]  Inclination angle in radians as defined by DIN ISO 8855.
+%   - FZ [N]    Tyre normal force (FZW) in newton as defined by DIN ISO
 %               8855. (Load on tyre is always positive)
-%   - tyreSide  In case the tyre is mounted on a side other than it was
+%   - VX [m/s]  Slip point or wheel centerpoint longitudinal velocity.
+%               Theoretically the slip point velocity should be used, but
+%               the wheel centerpoint velocity is often more practical.
+%   - IP [Pa]   Tyre inflation pressure in pascal.
+%   - usemode   Integer that controls execution behavior. As of now, only
+%               the tyre mounting side is set using this parameter.
+%               In case the tyre is mounted on a side other than it was
 %               tested on, the tyre curves are mirrored assuming skew-
-%               symmetry. For example, if data was recorded with 'LEFT' (0)
-%               tyre but 'tyreSide' is provided as 'RIGHT' (1), mirroring
+%               symmetry. For example, if data was recorded with LEFT (0)
+%               tyre but 'tyreSide' is provided as RIGHT (1), mirroring
 %               takes place. Provide as:
-%                   0: LEFT
-%                   1: RIGHT
+%                   LEFT:  0
+%                   RIGHT: 1
 %
 % Outputs:
-%   - Fx        Longitudinal tyre force.
-%   - Fy        Lateral tyre force.
-%   - Mz        Self-aligning torque.
-%   - mux       Longitudinal tyre friction coefficient.
-%   - muy       Lateral tyre friction coefficient.
-%
-narginchk(7,7)
-mirrorCurve = tyreSide ~= params.TYRESIDE;
-slipangl = (-1).^mirrorCurve.*slipangl;
-[Fx,mux] = magicformula.v62.equations.Fx(params,...
-    slipangl,longslip,inclangl,pressure,tyreNormF);
-[Fy,muy] = magicformula.v62.equations.Fy(params,...
-    slipangl,longslip,inclangl,pressure,tyreNormF);
+%   - Fx [N]    Longitudinal tyre force.
+%   - Fy [N]    Lateral tyre force.
+%   - Mz [N*m]  Self-aligning torque.
+%   - mux [1]   Longitudinal tyre friction coefficient.
+%   - muy [1]   Lateral tyre friction coefficient.
+
+narginchk(8,8)
+
+if isempty(IP); IP = p.INFLPRES; end
+if isempty(usemode); usemode = p.TYRESIDE; end
+
+tyreside = usemode;
+mirrorCurve = tyreside ~= p.TYRESIDE;
+SA = (-1).^mirrorCurve.*SA;
+[Fx,mux] = magicformula.v62.equations.Fx(p,SA,SX,IA,IP,FZ);
+[Fy,muy] = magicformula.v62.equations.Fy(p,SA,SX,IA,IP,FZ);
 % todo: Mz0 temporarily in place of Mz
-Mz = magicformula.v62.equations.Mz0(params, ...
-    slipangl,inclangl,pressure,tyreNormF);
+Mz = magicformula.v62.equations.Mz0(p,SA,IA,IP,FZ);
 Fy = (-1).^mirrorCurve.*Fy;
 end
-
