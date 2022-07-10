@@ -31,11 +31,9 @@ classdef Model < magicformula.Model
                 mdl.importTyrePropertiesFile(file);
             end
         end
-        function [Fx,Fy,Mz,mux,muy] = eval(mdl,slipangl,longslip,inclangl,...
-                pressure,tyreNormF,tyreSide)
-            params = struct(mdl.Parameters);
-            [Fx,Fy,Mz,mux,muy] = magicformula.v62.eval(params,...
-                slipangl,longslip,inclangl,pressure,tyreNormF,tyreSide);
+        function [Fx,Fy,Mz,mux,muy] = eval(mdl,SX,SA,IA,FZ,VX,IP,usemode)
+            p = struct(mdl.Parameters);
+            [Fx,Fy,Mz,mux,muy] = magicformula.v62.eval(p,SX,SA,IA,FZ,VX,IP,usemode);
         end
         function value = get.Version(mdl)
             value = mdl.Parameters.FITTYP.Value;

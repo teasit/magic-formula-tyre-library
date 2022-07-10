@@ -57,7 +57,7 @@ classdef FitterTest < matlab.unittest.TestCase
                 IP = measurement.INFLPRES;
                 FZ = measurement.FZW;
                 FX = measurement.FX;
-                FX_mdl = tyre.eval(SA,SX,IA,IP,FZ,0);
+                FX_mdl = tyre.eval(SX,SA,IA,FZ,[],IP,0);
                 FX_max = max(abs([FX FX_mdl]), [], 'all');
                 FX_nrm = [FX FX_mdl]/FX_max;
                 rmse(i) = sqrt(mean((FX_nrm(:,1)-FX_nrm(:,2)).^2));
@@ -88,7 +88,7 @@ classdef FitterTest < matlab.unittest.TestCase
                 IP = measurement.INFLPRES;
                 FZ = measurement.FZW;
                 FY = measurement.FYW;
-                [~,FY_mdl] = tyre.eval(SA,SX,IA,IP,FZ,0);
+                [~,FY_mdl] = tyre.eval(SX,SA,IA,FZ,[],IP,0);
                 FY_max = max(abs([FY FY_mdl]), [], 'all');
                 FY_nrm = [FY FY_mdl]/FY_max;
                 rmse(i) = sqrt(mean((FY_nrm(:,1)-FY_nrm(:,2)).^2));
@@ -119,7 +119,7 @@ classdef FitterTest < matlab.unittest.TestCase
                 IP = measurement.INFLPRES;
                 FZ = measurement.FZW;
                 MZ = measurement.MZW;
-                [~,~,MZ_mdl] = tyre.eval(SA,SX,IA,IP,FZ,0);
+                [~,~,MZ_mdl] = tyre.eval(SX,SA,IA,FZ,[],IP,0);
                 MZ_max = max(abs([MZ MZ_mdl]), [], 'all');
                 MZ_nrm = [MZ MZ_mdl]/MZ_max;
                 rmse(i) = sqrt(mean((MZ_nrm(:,1)-MZ_nrm(:,2)).^2));
@@ -150,7 +150,7 @@ classdef FitterTest < matlab.unittest.TestCase
                 IP = measurement.INFLPRES;
                 FZ = measurement.FZW;
                 FX = measurement.FX;
-                FX_mdl = tyre.eval(SA,SX,IA,IP,FZ,0);
+                FX_mdl = tyre.eval(SX,SA,IA,FZ,[],IP,0);
                 FX_max = max(abs([FX FX_mdl]), [], 'all');
                 FX_nrm = [FX FX_mdl]/FX_max;
                 rmse(i) = sqrt(mean((FX_nrm(:,1)-FX_nrm(:,2)).^2));
@@ -181,7 +181,7 @@ classdef FitterTest < matlab.unittest.TestCase
                 IP = measurement.INFLPRES;
                 FZ = measurement.FZW;
                 FY = measurement.FYW;
-                [~, FY_mdl] = tyre.eval(SA,SX,IA,IP,FZ,0);
+                [~, FY_mdl] = tyre.eval(SX,SA,IA,FZ,[],IP,0);
                 FY_max = max(abs([FY FY_mdl]), [], 'all');
                 FY_nrm = [FY FY_mdl]/FY_max;
                 rmse(i) = sqrt(mean((FY_nrm(:,1)-FY_nrm(:,2)).^2));
