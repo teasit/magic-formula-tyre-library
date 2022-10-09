@@ -1,4 +1,7 @@
 classdef NoMeasurementForFitMode < MException
+    properties (SetAccess = protected)
+        FitMode magicformula.v62.FitMode
+    end
     methods
         function obj = NoMeasurementForFitMode(fitmode)
             arguments
@@ -8,6 +11,7 @@ classdef NoMeasurementForFitMode < MException
             msgtext = sprintf(...
                 'Measurement has no data for fit-mode "%s".', fitmode);
             obj@MException(errId, msgtext)
+            obj.FitMode = fitmode;
         end
     end
 end
