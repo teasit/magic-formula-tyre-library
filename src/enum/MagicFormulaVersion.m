@@ -1,4 +1,4 @@
-classdef (Hidden) MagicFormulaVersion < Simulink.IntEnumType
+classdef MagicFormulaVersion < Simulink.IntEnumType
     enumeration
         v61 (61)
         v60 (60)
