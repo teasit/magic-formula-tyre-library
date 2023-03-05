@@ -4,10 +4,12 @@ classdef Measurement
         Metadata (:,1) tydex.Metadata
         Constant (:,1) tydex.ConstantParameter
         Measured (:,1) tydex.MeasuredParameter
+        ModelParameters (:,1) tydex.ModelParameter
     end
     properties (Access = private)
         ConstantNames cell
         MeasuredNames cell
+        ModelParameterNames cell
     end
     properties (Dependent)
         INCLANGL
@@ -27,6 +29,20 @@ classdef Measurement
         MZW
     end
     methods
+        function obj = Measurement(file)
+            arguments
+                file char = []
+            end
+            if isempty(file)
+                return
+            else
+                mustBeFile(file)
+                isTYDEX = endsWith(file, '.tdx', 'IgnoreCase', true);
+                assert(isTYDEX, 'Must end with ''*.tdx''!')
+            end
+            reader = tydex.FileReader();
+            obj = reader.read(file);
+        end
         function measurements = index(measurements)
             arguments
                 measurements tydex.Measurement
@@ -35,6 +51,7 @@ classdef Measurement
                 measurement = measurements(num);
                 measurement.ConstantNames = {measurement.Constant.Name};
                 measurement.MeasuredNames = {measurement.Measured.Name};
+                measurement.ModelParameterNames = {measurement.ModelParameters.Name};
                 measurements(num) = measurement;
             end
         end
@@ -49,6 +66,27 @@ classdef Measurement
                 data = measurement.Measured(1).Data;
                 len = len + length(data);
             end
+        end
+        function [SX,SA,FZ,IP,IA,VX,FX,FY,MZ,MY,MX,W,T] = unpack(measurement)
+            arguments
+                measurement tydex.Measurement {mustBeScalarOrEmpty}
+            end
+            if isempty(measurement)
+                return
+            end
+            SX = measurement.LONGSLIP;
+            SA = measurement.SLIPANGL;
+            FZ = measurement.FZW;
+            IP = measurement.INFLPRES;
+            IA = measurement.INCLANGL;
+            VX = measurement.LONGVEL;
+            FX = measurement.FX;
+            FY = measurement.FYW;
+            MZ = measurement.MZW;
+            MY = measurement.MYW;
+            MX = measurement.MXW;
+            W = measurement.WHROTSPD;
+            T = measurement.RUNTIME;
         end
         function measurements = downsample(measurements, n, phase)
             %DOWNSAMPLE Wrapper for MATLAB function downsample
@@ -107,12 +145,17 @@ classdef Measurement
             param = metadata(I);
         end
         function param = getParameter(meas, name)
-            idx = strcmp(meas.ConstantNames,name);
-            if any(idx)
-                param = meas.Constant(idx).Value;
+            isConstant = strcmp(meas.ConstantNames,name);
+            isMeasured = strcmp(meas.MeasuredNames,name);
+            isMdlParam = strcmp(meas.ModelParameterNames,name);
+            if any(isConstant)
+                param = meas.Constant(isConstant).Value;
+            elseif any(isMeasured)
+                param = meas.Measured(isMeasured).Data;
+            elseif any(isMdlParam)
+                param = meas.ModelParameters(isMdlParam).Value;
             else
-                idx = strcmp(meas.MeasuredNames,name);
-                param = meas.Measured(idx).Data;
+                param = [];
             end
         end
     end

@@ -5,11 +5,18 @@ classdef TydexImportExport < matlab.unittest.TestCase
     end
     methods (TestClassSetup)
         function parseMeasurements(testCase)
-            file = fullfile('doc', 'examples', 'fsae-ttc-data', ...
-                'fsaettc_obscured_testbench_drivebrake.mat');
-            parser = tydex.parsers.FSAETTC_SI_ISO_Mat_DriveBrake();
-            measurements = parser.run(file);
-            testCase.MeasurementsParsed = measurements;
+            folder = 'doc/examples/fsae-ttc-data';
+            files = fullfile(folder, {
+                'fsaettc_obscured_testbench_drivebrake.mat'
+                'fsaettc_obscured_testbench_cornering.mat'
+                });
+            parser = tydex.parsers.FSAETTC_SI_ISO_Mat();
+            for i = 1:numel(files)
+                file = files{i};
+                measurements = parser.run(file);
+                testCase.MeasurementsParsed = [
+                    testCase.MeasurementsParsed measurements];
+            end
         end
         function createTempFolder(testCase) 
             savedir = testCase.TdxSaveDir;

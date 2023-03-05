@@ -7,9 +7,6 @@ classdef FileReader < tydex.FileInterface
         
         % Measurements objects read from files.
         Measurement tydex.Measurement
-        
-        % Tyre Mmodel parameter objects read from files.
-        ModelParameters tydex.ModelParameter
     end
     properties (Transient, Access = private)
         File char
@@ -32,7 +29,6 @@ classdef FileReader < tydex.FileInterface
                 obj.File = file;
             end
             obj.Measurement = tydex.Measurement();
-            obj.ModelParameters = tydex.ModelParameter.empty();
             mustBeFile(file)
             readFileText(obj)
             
@@ -74,6 +70,10 @@ classdef FileReader < tydex.FileInterface
             range = obj.KeywordsContentRange(I,:);
             text = text(range(1):range(2));
             text = strip(text);
+            
+            if isempty(text)
+                return
+            end
             
             switch keyword
                 case 'COMMENTS'
@@ -138,25 +138,21 @@ classdef FileReader < tydex.FileInterface
                         measurement.Measured(i) = measured;
                     end
                 case 'MODELPARAMETERS'
-                    format = '%10s%30s%10s%10s';
-                    scan = textscan(text, format, 'Delimiter', '\n');
-                    scan = strtrim(scan);
-                    vars = scan{1};
-                    descs = scan{2};
-                    units = scan{3};
-                    vals = scan{4};
-                    for i = 1:numel(vars)
-                        var = vars{i};
-                        val = vals{i};
+                    lines = strsplit(text, '\n');
+                    for i = 1:numel(lines)
+                        line = lines{i};
+                        var = strtrim(line(1:10));
+                        desc = strtrim(line(11:40));
+                        unit = strtrim(line(41:50));
+                        val = strtrim(line(51:end));
                         [i0,i1] = regexp(val ,'\d+');
                         isNumeric = (i1-i0+1) == numel(val);
                         if isNumeric
                             val = str2double(val);
                         end
-                        unit = units{i};
-                        desc = descs{i};
                         param = tydex.ModelParameter(var, unit, val, desc);
-                        obj.ModelParameters = [obj.ModelParameters; param];
+                        measurement.ModelParameters = [
+                            measurement.ModelParameters; param];
                     end
                 case {'MODELDEFINITION', 'MODELCOEFFICIENTS', ...
                         'MODELCHANNELS', 'MODELOUTPUTS', 'MODELEND', 'END'}

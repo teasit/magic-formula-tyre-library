@@ -1,0 +1,49 @@
+"MagicFormulaTyre.magicformula": {
+    "inputs": [
+        {
+            "name": "params",
+            "kind": "required",
+            "type": [
+                "struct",
+                "magicformula.v61.Parameters"
+            ],
+            "purpose": "Parameter struct"
+        },
+        {
+            "name": "SX",
+            "kind": "required",
+            "type": "numeric",
+            "purpose": "Slip ratio"
+        },
+        {
+            "name": "SA",
+            "kind": "required",
+            "type": "numeric",
+            "purpose": "Slip angle"
+        },
+        {
+            "name": "FZ",
+            "kind": "required",
+            "type": "numeric",
+            "purpose": "Tyre normal force"
+        },
+        {
+            "name": "IP",
+            "kind": "required",
+            "type": "numeric",
+            "purpose": "Inflation pressure"
+        },
+        {
+            "name": "IA",
+            "kind": "required",
+            "type": "numeric",
+            "purpose": "Inclination angle"
+        },
+        {
+            "name": "side",
+            "kind": "ordered",
+            "type": "choices={0,1}",
+            "purpose": "Mounting side of tire (0='LEFT',1='RIGHT)"
+        }
+    ]
+},

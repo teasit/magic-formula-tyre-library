@@ -4,7 +4,7 @@ classdef ModelParameter
         Name
         Unit
         Value
-        Description
+        Description = '-'
     end
     methods
         function param = ModelParameter(name, unit, value, desc)
