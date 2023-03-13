@@ -2,13 +2,12 @@
 
 [![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/magic-formula-tyre-library)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
-[![GitHub downloads](https://img.shields.io/github/downloads/teasit/magic-formula-tyre-library/total)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
-![MATLAB version compatability](https://img.shields.io/badge/compatibility-%E2%89%A5R2021a-orange)
+[![R2022b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml/badge.svg?branch=test)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml)
 
 ![Fitting Example](doc/images/magic_formula_library_socialpreview.png)
 
 ```matlab
-[FX,FY,MZ,MY,MX] = MAGICFORMULA(params,__)
+[FX,FY,MZ,MY,MX] = magicformula(params,__)
 ```
 
 - Computationally efficient
@@ -22,6 +21,15 @@
 - MATLAB Base
 - (Optional) Optimization Toolbox (fitting)
 - (Optional) Signal Processing Toolbox (measurement import)
+
+### Release Compatibility
+
+- [![R2022b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml)
+- [![R2022a](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022a.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022a.yml)
+- [![R2021b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021b.yml)
+- [![R2021a](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021a.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021a.yml)
+- [![R2020b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020b.yml)
+- [![R2020a](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020a.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020a.yml)
 
 ## Installation
 

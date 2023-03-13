@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="1774593998" file="C:\Users\Tom\Documents\magic-formula-tyre-library\ToolboxPackager.prj" location="C:\Users\Tom\Documents\magic-formula-tyre-library" name="ToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="1575047207" file="C:\Users\Tom\Documents\magic-formula-tyre-library\ToolboxPackager.prj" location="C:\Users\Tom\Documents\magic-formula-tyre-library" name="ToolboxPackager" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>MagicFormulaTyreLibrary</param.appname>
     <param.authnamewatermark>Tom Teasdale</param.authnamewatermark>
     <param.email>teasdale@lightsaber.red</param.email>
@@ -7,7 +7,7 @@
     <param.summary>MATLAB library for Magic Formula Tyre Modeling</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\toolboximage.png</param.screenshot>
-    <param.version>2.0.1</param.version>
+    <param.version>2.0.2</param.version>
     <param.output>${PROJECT_ROOT}\MagicFormulaTyreLibrary.mltbx</param.output>
     <param.products.name>
       <item>MATLAB</item>
@@ -48,6 +48,7 @@
 
 *.asv
 +tests
+.github/
 .git/
 .gitattributes
 .gitignore
@@ -67,11 +68,13 @@ sandbox</param.exclude.filters>
     <param.javaclasspath.excludes />
     <param.exported.on.package>false</param.exported.on.package>
     <param.required.addons>
-      <requiredaddons />
+      <requiredaddons>
+        <requiredAddOn earliest="earliest" fromRepository="true" id="8f7663fb-2424-499c-b927-e2e983731252" include="false" latest="latest">MFeval</requiredAddOn>
+      </requiredaddons>
     </param.required.addons>
     <param.matlab.project.id />
     <param.matlab.project.name />
-    <param.release.start>R2021a</param.release.start>
+    <param.release.start>R2020b</param.release.start>
     <param.release.end>latest</param.release.end>
     <param.release.current.only>false</param.release.current.only>
     <param.compatiblity.windows>true</param.compatiblity.windows>

@@ -1,4 +1,4 @@
-classdef MagicFormulaVersion < uint8
+classdef MagicFormulaVersionSimulink < Simulink.IntEnumType
     enumeration
         v61 (61)
         v60 (60)

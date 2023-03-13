@@ -1,0 +1,48 @@
+name: R2021b
+on: [push]
+jobs:
+  test-matlab-ubuntu:
+    name: Run MATLAB Tests on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        with:
+          release: R2021b
+      - name: Run tests and generate artifacts
+        uses: matlab-actions/run-tests@v1
+        with:
+          test-results-junit: test-results/results.xml
+          code-coverage-cobertura: code-coverage/coverage.xml
+  # test-matlab-macos:
+  #   name: Run MATLAB Tests on Mac-OS
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v3
+  #     - name: Set up MATLAB
+  #       uses: matlab-actions/setup-matlab@v1
+  #       with:
+  #         release: R2021b
+  #     - name: Run tests and generate artifacts
+  #       uses: matlab-actions/run-tests@v1
+  #       with:
+  #         test-results-junit: test-results/results.xml
+  #         code-coverage-cobertura: code-coverage/coverage.xml
+  # test-matlab-windows:
+  #   name: Run MATLAB Tests on Windows
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v3
+  #     - name: Set up MATLAB
+  #       uses: matlab-actions/setup-matlab@v1
+  #       with:
+  #         release: R2021b
+  #     - name: Run tests and generate artifacts
+  #       uses: matlab-actions/run-tests@v1
+  #       with:
+  #         test-results-junit: test-results/results.xml
+  #         code-coverage-cobertura: code-coverage/coverage.xml
