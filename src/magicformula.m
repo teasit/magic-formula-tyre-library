@@ -76,7 +76,7 @@ end
 function [params,SX,SA,FZ,IP,IA,VX,side,version] = parseInputs(...
     params,SX,SA,varargin)
 if coder.target('MATLAB')
-    parser = magicformula.InputArgumentParser();
+    parser = magicformula.InputArgumentParser;
     parser.parse(params,SX,SA,varargin{:})
     
     results = parser.Results;
@@ -118,7 +118,10 @@ if coder.target('MATLAB')
     if isempty(VX)
         VX = params.LONGVL;
         if isempty(VX)
-            VX = 10;
+            VX = params.VXLOW;
+            if isempty(VX)
+                VX = 10;
+            end
         end
     end
     

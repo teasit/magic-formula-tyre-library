@@ -18,7 +18,7 @@ classdef (Hidden) InputArgumentParser < inputParser
             addOptional(parser,'FZ',[],isValidNumericVector);
             addOptional(parser,'IP',[],isValidNumericVector);
             addOptional(parser,'IA',0,isValidNumericVector);
-            addOptional(parser,'VX',0,isValidNumericVector);
+            addOptional(parser,'VX',[],isValidNumericVector);
             addOptional(parser,'side',[],isValidTyreSide);
             addOptional(parser,'version',[],isValidVersion);
         end

@@ -12,8 +12,7 @@ classdef Fitter < handle
         FitModes magicformula.FitMode
         
         %Solver options. Set max iterations, function evaluations etc.
-        Options optim.options.SolverOptions = optimoptions('fmincon', ...
-            'Display', 'iter-detailed')
+        Options struct = magicformula.v61.Fitter.initOptimizerOptions()
     end
     properties (SetAccess = protected)
         %Fitted parameter values, updated after each Fit-Mode solve.
@@ -87,6 +86,7 @@ classdef Fitter < handle
                 fitmode magicformula.FitMode
             end
             import magicformula.exceptions.NoMeasurementForFitMode
+            import magicformula.exceptions.EmptyMeasurementChannel
             import magicformula.exceptions.EmptyMeasurement
             import magicformula.FitMode
             fitter.ActiveFitMode = fitmode;
@@ -109,17 +109,23 @@ classdef Fitter < handle
             mfinputs = fitter.preprocess(measurements);
             switch fitmode
                 case {FitMode.Fx0, FitMode.Fx}
-                    testdata = fitter.getTestData(measurements, 'FX');
+                    channel = 'FX';
                 case {FitMode.Fy0, FitMode.Fy}
-                    testdata = fitter.getTestData(measurements, 'FYW');
+                    channel = 'FYW';
                 case {FitMode.Mz0, FitMode.Mz}
-                    testdata = fitter.getTestData(measurements, 'MZW');
+                    channel = 'MZW';
                 case FitMode.Mx
-                    testdata = fitter.getTestData(measurements, 'MXW');
+                    channel = 'MXW';
                 case FitMode.My
-                    testdata = fitter.getTestData(measurements, 'MYW');
+                    channel = 'MYW';
                 case FitMode.Fz
                     error('Fitmode ''%s'' not yet implemented', fitmode)
+            end
+
+            testdata = fitter.getTestData(measurements, channel);
+            if isempty(testdata)
+                e = EmptyMeasurementChannel(channel);
+                throw(e)
             end
             
             costFun = @(x) fitter.costFun(x,p,mfinputs,testdata,fitmode);
@@ -446,6 +452,14 @@ classdef Fitter < handle
                     ub(i) = params.(name).Max;
                 end
             end
+        end
+        function opts = initOptimizerOptions()
+            opts = optimset('fmincon');
+            opts.MaxIter = 1000;
+            opts.MaxFunEvals = 3000;
+            opts.Algorithm = 'interior-point';
+            opts.UseParallel = false;
+            opts.Display = 'iter-detailed';
         end
         function params = appendFitted(params,x,fitmode)
             arguments

@@ -122,12 +122,24 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
             
             dt = data.ET(2) - data.ET(1);
             nMinPeakHeight = options.MinPeakTime/dt;
-            [~, locs.FZW] = findpeaks([counts.FZW(2) counts.FZW counts.FZW(end-1)], ...
-                'MinPeakHeight', nMinPeakHeight);
-            [~, locs.INFLPRES] = findpeaks([counts.INFLPRES(2) counts.INFLPRES counts.INFLPRES(end-1)], ...
-                'MinPeakHeight', nMinPeakHeight);
-            [~, locs.INCLANGL] = findpeaks([counts.INCLANGL(2) counts.INCLANGL counts.INCLANGL(end-1)], ...
-                'MinPeakHeight', nMinPeakHeight);
+            if numel(counts.FZW) > 1
+                [~, locs.FZW] = findpeaks([counts.FZW(2) counts.FZW counts.FZW(end-1)], ...
+                    'MinPeakHeight', nMinPeakHeight);
+            else
+                locs.FZW = 1;
+            end
+            if numel(counts.INFLPRES) > 1
+                [~, locs.INFLPRES] = findpeaks([counts.INFLPRES(2) counts.INFLPRES counts.INFLPRES(end-1)], ...
+                    'MinPeakHeight', nMinPeakHeight);
+            else
+                locs.INFLPRES = 1;
+            end
+            if numel(counts.INCLANGL) > 1
+                [~, locs.INCLANGL] = findpeaks([counts.INCLANGL(2) counts.INCLANGL counts.INCLANGL(end-1)], ...
+                    'MinPeakHeight', nMinPeakHeight);
+            else
+                locs.INCLANGL = 1;
+            end
             if isDriveBrakeTest
                 [~, locs.SLIPANGL] = findpeaks([counts.SLIPANGL(2) counts.SLIPANGL counts.SLIPANGL(end-1)], ...
                     'MinPeakHeight', nMinPeakHeight);

@@ -1,6 +1,7 @@
 # Changelog
 
-- FIX: Definition of enumeration "MagicFormulaVersion" caused unnecessary
-        dependency to Simulink, so it had to be installed for MATLAB-only.
-- NEW: Automatic unit tests on GitHub; this tells you which MATLAB releases
-        are compatible.
+- CHANGED: input handling of "VX" was not ideal; now has more fallback levels
+- CHANGED: Fitter settings are not stored as `optim.options.SolverOptions` but as struct.
+  This is easier to handle when storing settings in the global MATLAB `settings()`.
+- FIX: parser handling of FSAE TTC MAT files
+- improved error handling
