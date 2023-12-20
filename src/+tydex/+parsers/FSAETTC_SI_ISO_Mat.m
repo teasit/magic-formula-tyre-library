@@ -165,17 +165,17 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
             end
             
             if isDriveBrakeTest
-                measurements(length(binvalues.FZW)...
+                n_measurement = length(binvalues.FZW)...
                     *length(binvalues.INCLANGL)...
                     *length(binvalues.SLIPANGL)...
-                    *length(binvalues.INFLPRES))...
-                    = Measurement();
+                    *length(binvalues.INFLPRES);
             else
-                measurements(length(binvalues.FZW)...
+                n_measurement = length(binvalues.FZW)...
                     *length(binvalues.INCLANGL)...
-                    *length(binvalues.INFLPRES))...
-                    = Measurement();
+                    *length(binvalues.INFLPRES);
             end
+            measurements(n_measurement) = Measurement();
+            importFailed = false(n_measurement, 1);
             
             num = 1;
             if isDriveBrakeTest
@@ -187,7 +187,13 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
                                     bins.INCLANGL(:,i2)  &...
                                     bins.INFLPRES(:,i3)  &...
                                     bins.SLIPANGL(:,i4);
-                                
+                                noDataFound = sum(I) == 0;
+                                if noDataFound
+                                    importFailed(num) = true;
+                                    num = num+1;
+                                    continue
+                                end
+
                                 LONGVEL     = MeasuredParameter('LONGVEL',  'km/h',  data.V(I));
                                 WHROTSPD    = MeasuredParameter('WHROTSPD', 'rad/s', data.N(I)*2*pi);
                                 FX          = MeasuredParameter('FX',       'N',     data.FX(I));
@@ -240,6 +246,12 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
                             I = bins.FZW(:,i1)       &...
                                 bins.INCLANGL(:,i2)  &...
                                 bins.INFLPRES(:,i3);
+                            noDataFound = sum(I) == 0;
+                            if noDataFound
+                                importFailed(num) = true;
+                                num = num+1;
+                                continue
+                            end
                             
                             LONGVEL     = MeasuredParameter('LONGVEL',  'km/h',  data.V(I));
                             WHROTSPD    = MeasuredParameter('WHROTSPD', 'rad/s', data.N(I)*2*pi);
@@ -257,7 +269,7 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
                                 LONGVEL RUNTIME WHROTSPD LONGSLIP SLIPANGL FZW INFLPRES INCLANGL FX FYW MXW MZW
                                 ];
                             
-                            FZW = ConstantParameter('FZW',      'N',    binvalues.FZW(i1));
+                            FZW =      ConstantParameter('FZW',      'N',    binvalues.FZW(i1));
                             LONGSLIP = ConstantParameter('LONGSLIP', '-',    0);
                             INCLANGL = ConstantParameter('INCLANGL', 'deg',  binvalues.INCLANGL(i2));
                             INFLPRES = ConstantParameter('INFLPRES', 'kPa',  binvalues.INFLPRES(i3));
@@ -286,6 +298,7 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
                     end
                 end
             end
+            measurements(importFailed) = [];
             measurements = obj.fixUnits(measurements);
             measurements = obj.fixSigns(measurements);
         end
