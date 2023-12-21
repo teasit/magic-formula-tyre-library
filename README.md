@@ -2,7 +2,7 @@
 
 [![View on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://de.mathworks.com/matlabcentral/fileexchange/110955)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/magic-formula-tyre-library)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
-[![R2022b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml)
+[![MATLAB Latest Tests Status](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2023b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2023b.yml)
 
 ![Fitting Example](doc/images/magic_formula_library_socialpreview.png)
 
