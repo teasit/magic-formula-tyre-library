@@ -24,12 +24,10 @@
 
 ### Release Compatibility
 
+- [![R2023b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2023b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2023b.yml)
 - [![R2022b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022b.yml)
-- [![R2022a](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022a.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2022a.yml)
 - [![R2021b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021b.yml)
-- [![R2021a](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021a.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2021a.yml)
 - [![R2020b](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020b.yml)
-- [![R2020a](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020a.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2020a.yml)
 
 ## Installation
 
