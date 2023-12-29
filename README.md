@@ -4,7 +4,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/teasit/magic-formula-tyre-library)](https://github.com/teasit/magic-formula-tyre-library/releases/latest)
 [![MATLAB Latest Tests Status](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2023b.yml/badge.svg?branch=main)](https://github.com/teasit/magic-formula-tyre-library/actions/workflows/test-matlab-r2023b.yml)
 
-![Fitting Example](doc/images/magic_formula_library_socialpreview.png)
+![Social-Preview](doc/images/magic_formula_library_socialpreview.png)
 
 ```matlab
 [FX,FY,MZ,MY,MX] = magicformula(params,__)
@@ -20,7 +20,7 @@
 
 - MATLAB Base
 - (Optional) Optimization Toolbox (fitting)
-- (Optional) Signal Processing Toolbox (measurement import)
+- (Optional) Parallel Computing Toolbox (parallel fitting)
 
 ### Release Compatibility
 
@@ -50,25 +50,26 @@ The data has been de-identified to conform with the FSAE TTC's
 [license agreement](https://www.millikenresearch.com/FSAE_TTC_agreement.pdf).
 
 ```matlab
-folder = 'doc/examples/fsae-ttc-data';
-file = fullfile(folder, 'fsaettc_obfuscated.tir');
-tyre = MagicFormulaTyre(file);
-
-file = fullfile(folder, 'fsaettc_obscured_testbench_drivebrake.mat');
 parser = tydex.parsers.FSAETTC_SI_ISO_Mat();
-measurements = parser.run(file);
-measurements = measurements([30 40 55 60 70 75]);
-
+measurements = parser.run('doc/examples/ttc/drivebrake.mat');
+tyre = MagicFormulaTyre('doc/examples/ttc/obfuscated.tir');
 figure(); grid on; hold on
-c = colororder();
-for i = 1:numel(measurements)
-    [SX,SA,FZ,IP,IA,VX,FX] = unpack(measurements(i));
-    FX_mdl = magicformula(tyre,SX,SA,FZ,IP,IA,VX);
-    plot(SX, FX_mdl, 'Color', c(i,:), 'LineWidth', 2)
-    plot(SX, FX, '.', 'Color', c(i,:), 'MarkerSize', 4)
-end
-xlabel('SX / 1'); ylabel('FX / N')
+magicformula.plots.compareFxSX(tyre, measurements(2:5))
 ```
+
+![Model vs. Data Plot](doc/images/magic_formula_library_socialpreview.png)
+
+### Example: Friction Ellipse
+
+Also known as the Kamm-Circle when approximating the tire friction limit as a circle when it actually is an ellipse.
+
+```matlab
+tyre = MagicFormulaTyre('doc/examples/ttc/obfuscated.tir');
+figure(); grid on; hold on
+magicformula.plots.kamm(tyre)
+```
+
+![Kamm Plot](doc/images/kamm.png)
 
 Further examples can be found in the  [`doc/examples`](./doc/examples) folder.
 

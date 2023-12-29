@@ -71,8 +71,7 @@ classdef MagicFormulaTyre < matlab.mixin.Copyable & matlab.mixin.CustomDisplay
                 obj
                 measurements tydex.Measurement
                 fitmodes magicformula.FitMode
-                options optim.options.SolverOptions = ...
-                    optimoptions('fmincon', 'Display', 'iter-detailed')
+                options struct = struct.empty
             end
             params = obj.Parameters;
             version = obj.Version;

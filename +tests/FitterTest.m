@@ -3,8 +3,8 @@ classdef FitterTest < matlab.unittest.TestCase
         Fitter magicformula.v61.Fitter
         Tyre MagicFormulaTyre
         Measurements tydex.Measurement
-        MeasurementFileCornering char {mustBeFile} = 'doc/examples/fsae-ttc-data/fsaettc_obscured_testbench_cornering.mat'
-        MeasurementFileDriveBrake char {mustBeFile} = 'doc/examples/fsae-ttc-data/fsaettc_obscured_testbench_drivebrake.mat'
+        MeasurementFileCornering char {mustBeFile} = 'doc/examples/ttc/cornering.mat'
+        MeasurementFileDriveBrake char {mustBeFile} = 'doc/examples/ttc/drivebrake.mat'
         %Average RMSE of model versus data across fitted measurements must
         %be lower than this value or test will fail.
         ThresholdAverageRMSE = 0.3;

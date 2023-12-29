@@ -1,81 +1,39 @@
 classdef FSAETTC_SI_ISO_Mat < tydex.Parser
-    properties (Access = protected)
+    properties
+        % Looking at the histogram, these thresholds decide which 'bins'
+        % will be grouped together into one steady-state cluster.
         SteadyStateTolerances struct = struct(...
-            'FZW',      150, ...    % [N]
-            'INFLPRES', 5,   ...    % [kPa]
-            'INCLANGL', 0.2, ...    % [deg]
-            'SLIPANGL', 0.2)        % [deg]
+            'FZW',      150, ...        % [N]
+            'INFLPRES', 5E3, ...        % [Pa]
+            'INCLANGL', pi/300, ...     % [rad]
+            'SLIPANGL', pi/300, ...     % [rad]
+            'LONGSLIP', 0.01);          % [-]
+
+        % Names of FSAE TTC variables are mapped to internal (TYDEX) names.
+        Mapping struct = struct(...
+            'LONGVEL',  struct('InputName', 'V',  'InputUnit', 'km/h'), ...
+            'WHROTSPD', struct('InputName', 'N',  'InputUnit', '1/s'),  ...
+            'FX',       struct('InputName', 'FX', 'InputUnit', 'N'),    ...
+            'FYW',      struct('InputName', 'FY', 'InputUnit', 'N'),    ...
+            'MXW',      struct('InputName', 'MX', 'InputUnit', 'Nm'),   ...
+            'MZW',      struct('InputName', 'MZ', 'InputUnit', 'Nm'),   ...
+            'RUNTIME',  struct('InputName', 'ET', 'InputUnit', 's'),    ...
+            'LONGSLIP', struct('InputName', 'SL', 'InputUnit', '-'),    ...
+            'SLIPANGL', struct('InputName', 'SA', 'InputUnit', 'deg'),  ...
+            'INCLANGL', struct('InputName', 'IA', 'InputUnit', 'deg'),  ...
+            'INFLPRES', struct('InputName', 'P',  'InputUnit', 'kPa'),  ...
+            'FZW',      struct('InputName', 'FZ', 'InputUnit', 'N'));
+
+        % Steady-state is achieved when data exists for 'x' seconds.
+        MinSteadyStateTime {isinteger} = 5
+
+        % Steady-state (bin) values are rounded to be more readable.
+        SteadyStateNumberOfDigits (1,1) double = 2
     end
-    methods (Static, Access = public)
-        function measurements = fixSigns(measurements)
-            %FIXSIGNS Convert SAE to ISO coordinates.
-            arguments
-                measurements tydex.Measurement
-            end
-            for num = 1:numel(measurements)
-                measurement = measurements(num);
-                for i = 1:numel(measurement.Measured)
-                    param = measurement.Measured(i);
-                    name = param.Name;
-                    switch name
-                        case {'SLIPANGL','FYW','MYW','MZW'}
-                            param.Data = -param.Data;
-                        case 'FZW'
-                            param.Data = abs(param.Data);
-                    end
-                    measurement.Measured(i) = param;
-                end
-                for i = 1:numel(measurement.Constant)
-                    param = measurement.Constant(i);
-                    name = param.Name;
-                    switch name
-                        case {'SLIPANGL','FYW','MYW','MZW'}
-                            param.Value = -param.Value;
-                        case 'FZW'
-                            param.Value = abs(param.Value);
-                    end
-                    measurement.Constant(i) = param;
-                end
-                measurements(num) = measurement;
-            end
-        end
-        function measurements = fixUnits(measurements)
-            %FIXUNITS Convert to base SI units.
-            arguments
-                measurements tydex.Measurement
-            end
-            import tydex.parsers.FSAETTC_SI_ISO_Mat.convertUnit
-            
-            for num = 1:numel(measurements)
-                measurement = measurements(num);
-                for i = 1:numel(measurement.Measured)
-                    param = measurement.Measured(i);
-                    [unit,factor] = convertUnit(param.Unit);
-                    param.Unit = unit;
-                    param.Data = param.Data*factor;
-                    measurement.Measured(i) = param;
-                end
-                for i = 1:numel(measurement.Constant)
-                    param = measurement.Constant(i);
-                    [unit,factor] = convertUnit(param.Unit);
-                    param.Unit = unit;
-                    param.Value = param.Value*factor;
-                    measurement.Constant(i) = param;
-                end
-                for i = 1:numel(measurement.ModelParameters)
-                    param = measurement.ModelParameters(i);
-                    [unit,factor] = convertUnit(param.Unit);
-                    param.Unit = unit;
-                    param.Value = param.Value*factor;
-                    measurement.ModelParameters(i) = param;
-                end
-                measurements(num) = measurement;
-            end
-        end
+    methods (Static, Access = private)
         function [newUnit,factor] = convertUnit(unit)
-            arguments
-                unit char
-            end
+            mustBeA(unit, 'char')
+            unit = strtrim(unit);
             switch unit
                 case 'deg'
                     newUnit = 'rad';
@@ -86,12 +44,182 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
                 case 'kPa'
                     newUnit = 'Pa';
                     factor = 1000;
+                case {'1/s', 'Hz'}
+                    newUnit = 'rad/s';
+                    factor = 2*pi;
                 case {'s', 'N', 'Nm', '-', 'm/s', 'rad', 'rad/s'}
                     newUnit = unit;
                     factor = 1;
                 otherwise
-                    warning(['Unkown unit "' unit '"!' newline() ...
-                        'This may result in failure of the solver.'])
+                    warning('Unknown unit ''%s''.', unit)
+            end
+        end
+        function indices = findLocalMaxima(x, xmin)
+            %FINDLOCALMAXIMA using first and second derivatives.
+            % Equal neighbors are eliminated to get steady data.
+            % Local maxima will have a negative second derivative.
+            % Maxima with only very few samples can be discarded with xMin.
+            if length(x) == 1
+                indices = 1;
+                return
+            end
+            x = [x(:); 0];
+            indices = 1:numel(x);
+            isEqualToPrev = [false; ~(x(2:end)-x(1:end-1))];
+            x(isEqualToPrev) = [];
+            indices(isEqualToPrev) = [];
+            dx = [0; diff(x)];
+            ds = sign(dx);
+            dds = [diff(ds); 0];
+            I = dds < 0 & x > xmin;
+            indices = indices(I);
+        end
+        function idx = getIndexCombinations(s)
+            %GETINDEXCOMBINATIONS From R2023a 'combinations' can be used.
+            % Every steady-state combination is possible. Meaning, each
+            % inflation pressure could be tested with each normal load,
+            % then again for each slip angle --- and so on.
+            f = @(varargin) cellfun(varargin{:}, 'UniformOutput', false);
+            c = struct2cell(s);
+            idxFields = f(@(x) 1:numel(x), c);
+            idxGrid = cell(1, numel(idxFields));
+            [idxGrid{:}] = ndgrid(idxFields{:});
+            idxCell = f(@(x) x(:), idxGrid);
+            idx = cell2mat(idxCell);
+        end
+        function metadata = getMetadata(measId, supplier)
+            import tydex.Metadata
+            version = tydex.version();
+            metadata = [
+                Metadata('RELEASE', version)
+                Metadata('MEASID', measId)
+                Metadata('SUPPLIER', supplier)
+                ];
+        end
+        function measured = getMeasured(data, units, indices)
+            import tydex.MeasuredParameter
+            names = fieldnames(data);
+            n = numel(names);
+            measured = cell(n,1);
+            for i = 1:n
+                name = names{i};
+                unit = units{i};
+                values  = data.(name)(indices);
+                measured{i} = MeasuredParameter(name, unit, values);
+            end
+            measured = [measured{:}];
+        end
+        function constant = getConstant(vars_SS, vals_SS, units_SS)
+            import tydex.ConstantParameter
+            n = numel(vars_SS);
+            constant = cell(n,1);
+            for i = 1:n
+                var  = vars_SS{i};
+                val  = vals_SS(:,i);
+                unit = units_SS{i};
+                constant{i} = ConstantParameter(var, unit, val);
+            end
+            constant = vertcat(constant{:});
+        end
+        function modelpar = getModelPar(vars_SS, vals_SS, units_SS)
+            import tydex.ModelParameter
+
+            idx = strcmpi(vars_SS, 'FZW');
+            val = max(vals_SS(:,idx));
+            unit = units_SS{idx};
+            FNOMIN = ModelParameter('FNOMIN', unit, val);
+
+            idx = strcmpi(vars_SS, 'INFLPRES');
+            val = max(vals_SS(:,idx));
+            unit = units_SS{idx};
+            NOMPRES = ModelParameter('NOMPRES', unit, val);
+
+            modelpar = [FNOMIN; NOMPRES];
+        end
+        function [vals_SS, units_SS, I_SS] = getSteadyStateValuesAndIndices(...
+                vars_SS, data, units, bins, binvalues, idxCombinations)
+            nSamples = length(data.RUNTIME);
+
+            vars = fieldnames(data);
+            n = size(idxCombinations, 1);
+            m = numel(vars_SS);
+            vals_SS = nan(n,m);
+
+            noData = false(n,1);
+            I_SS = false(n, nSamples);
+            for i = 1:n
+                I_SS_comb = true(nSamples, 1);
+                for j = 1:numel(vars_SS)
+                    idx = idxCombinations(i,j);
+                    var = vars_SS{j};
+                    val = binvalues.(var)(idx);
+                    I_SS_var = bins.(var)(:,idx);
+                    I_SS_comb = I_SS_comb & I_SS_var;
+                    vals_SS(i,j) = val;
+                end
+                noData(i) = sum(I_SS_comb) == 0;
+                I_SS(i,:) = I_SS_comb(:);
+            end
+            I_SS(noData,:) = [];
+            vals_SS(noData,:) = [];
+
+            units_SS = repmat({char.empty},1,m);
+            for i = 1:m
+                var = vars_SS{i};
+                unit = units{strcmpi(vars, var)};
+                units_SS{i} = unit;
+            end
+        end
+    end
+    methods (Access = private)
+        function [output,units,vars_SS] = preprocessInputData(obj, input)
+            mapping = obj.Mapping;
+            vars = fieldnames(mapping);
+            nvars = numel(vars);
+            output = struct();
+            units = cell(nvars,1);
+            for i = 1:nvars
+                outputName = vars{i};
+                inputName = mapping.(outputName).InputName;
+                inputUnit = mapping.(outputName).InputUnit;
+                values = input.(inputName);
+                switch outputName
+                    case {'SLIPANGL','FYW','MYW','MZW'}
+                        values = -values;
+                    case 'FZW'
+                        values = abs(values);
+                end
+                [unit,factor] = obj.convertUnit(inputUnit);
+                output.(outputName) = values*factor;
+                units{i} = unit;
+            end
+
+            if all(output.LONGSLIP == 0)
+                vars_SS = {'FZW','INFLPRES','INCLANGL','LONGSLIP'};
+            else
+                vars_SS = {'FZW','INFLPRES','INCLANGL','SLIPANGL'};
+            end
+        end
+        function [bins, binvalues] = getHistogramBins(obj, data, vars_SS)
+            time = data.RUNTIME;
+            dt = diff(time(1:2));
+            nSamplesMin = obj.MinSteadyStateTime/dt;
+            tolerances = obj.SteadyStateTolerances;
+            nDigits = obj.SteadyStateNumberOfDigits;
+            for i = 1:numel(vars_SS)
+                var = vars_SS{i};
+                valRaw = data.(var);
+                [counts,edges] = histcounts(valRaw);
+                idx = obj.findLocalMaxima(counts, nSamplesMin);
+                b = (edges(idx) + edges(idx+1))/2;
+                b = round(b, nDigits);
+                b = unique(b);
+                eps = tolerances.(var);
+                xmin = abs(b) - eps;
+                xmax = abs(b) + eps;
+                x = abs(valRaw);
+                bins.(var) = x > xmin & x < xmax;
+                binvalues.(var) = b;
             end
         end
     end
@@ -100,207 +228,58 @@ classdef FSAETTC_SI_ISO_Mat < tydex.Parser
             arguments
                 obj
                 file char {mustBeFile}
-                options.MinPeakTime {isinteger} = 5
+                options.MeasurementID char = ''
+                options.Supplier char = 'FSAE TTC'
             end
-            import tydex.ConstantParameter
-            import tydex.MeasuredParameter
             import tydex.Measurement
-            import tydex.Metadata
-            import tydex.ModelParameter
-            
-            data = load(file);
-            [~,fileName] = fileparts(file);
-            
-            isCorneringTest = all(data.SL == 0);
-            isDriveBrakeTest = ~isCorneringTest;
-            
-            [counts.FZW,     edges.FZW]      = histcounts(data.FZ);
-            [counts.INFLPRES,edges.INFLPRES] = histcounts(data.P);
-            [counts.INCLANGL,edges.INCLANGL] = histcounts(data.IA);
-            [counts.SLIPANGL,edges.SLIPANGL] = histcounts(data.SA);
-            [counts.LONGSLIP,edges.LONGSLIP] = histcounts(data.SL);
-            
-            dt = data.ET(2) - data.ET(1);
-            nMinPeakHeight = options.MinPeakTime/dt;
-            if numel(counts.FZW) > 1
-                [~, locs.FZW] = findpeaks([counts.FZW(2) counts.FZW counts.FZW(end-1)], ...
-                    'MinPeakHeight', nMinPeakHeight);
-            else
-                locs.FZW = 1;
-            end
-            if numel(counts.INFLPRES) > 1
-                [~, locs.INFLPRES] = findpeaks([counts.INFLPRES(2) counts.INFLPRES counts.INFLPRES(end-1)], ...
-                    'MinPeakHeight', nMinPeakHeight);
-            else
-                locs.INFLPRES = 1;
-            end
-            if numel(counts.INCLANGL) > 1
-                [~, locs.INCLANGL] = findpeaks([counts.INCLANGL(2) counts.INCLANGL counts.INCLANGL(end-1)], ...
-                    'MinPeakHeight', nMinPeakHeight);
-            else
-                locs.INCLANGL = 1;
-            end
-            if isDriveBrakeTest
-                [~, locs.SLIPANGL] = findpeaks([counts.SLIPANGL(2) counts.SLIPANGL counts.SLIPANGL(end-1)], ...
-                    'MinPeakHeight', nMinPeakHeight);
-            end
-            
-            binvalues.FZW       = unique(round(abs(edges.FZW(locs.FZW)),2));
-            binvalues.INFLPRES  = unique(round(edges.INFLPRES(locs.INFLPRES),2));
-            binvalues.INCLANGL  = unique(round(edges.INCLANGL(locs.INCLANGL),2));
-            if isDriveBrakeTest
-                binvalues.SLIPANGL  = unique(round(edges.SLIPANGL(locs.SLIPANGL),2));
-            end
-            
-            eps = obj.SteadyStateTolerances;
-            bins.FZW = abs(data.FZ) > (abs(binvalues.FZW)-eps.FZW) ...
-                & abs(data.FZ) < (abs(binvalues.FZW)+eps.FZW);
-            bins.INCLANGL = abs(data.IA) > (abs(binvalues.INCLANGL)-eps.INCLANGL) ...
-                & abs(data.IA) < (abs(binvalues.INCLANGL)+eps.INCLANGL);
-            bins.INFLPRES = abs(data.P) > (binvalues.INFLPRES-eps.INFLPRES) ...
-                & abs(data.P) < (binvalues.INFLPRES+eps.INFLPRES);
-            if isDriveBrakeTest
-                bins.SLIPANGL = abs(data.SA) > (abs(binvalues.SLIPANGL)-eps.SLIPANGL) ...
-                    & abs(data.SA) < (abs(binvalues.SLIPANGL)+eps.SLIPANGL);
-            end
-            
-            if isDriveBrakeTest
-                n_measurement = length(binvalues.FZW)...
-                    *length(binvalues.INCLANGL)...
-                    *length(binvalues.SLIPANGL)...
-                    *length(binvalues.INFLPRES);
-            else
-                n_measurement = length(binvalues.FZW)...
-                    *length(binvalues.INCLANGL)...
-                    *length(binvalues.INFLPRES);
-            end
-            measurements(n_measurement) = Measurement();
-            importFailed = false(n_measurement, 1);
-            
-            num = 1;
-            if isDriveBrakeTest
-                for i1 = 1:length(binvalues.FZW)
-                    for i2 = 1:length(binvalues.INCLANGL)
-                        for i3 = 1:length(binvalues.INFLPRES)
-                            for i4 = 1:length(binvalues.SLIPANGL)
-                                I = bins.FZW(:,i1)       &...
-                                    bins.INCLANGL(:,i2)  &...
-                                    bins.INFLPRES(:,i3)  &...
-                                    bins.SLIPANGL(:,i4);
-                                noDataFound = sum(I) == 0;
-                                if noDataFound
-                                    importFailed(num) = true;
-                                    num = num+1;
-                                    continue
-                                end
 
-                                LONGVEL     = MeasuredParameter('LONGVEL',  'km/h',  data.V(I));
-                                WHROTSPD    = MeasuredParameter('WHROTSPD', 'rad/s', data.N(I)*2*pi);
-                                FX          = MeasuredParameter('FX',       'N',     data.FX(I));
-                                FYW         = MeasuredParameter('FYW',      'N',     data.FY(I));
-                                MXW         = MeasuredParameter('MXW',      'Nm',    data.MX(I));
-                                MZW         = MeasuredParameter('MZW',      'Nm',    data.MZ(I));
-                                RUNTIME     = MeasuredParameter('RUNTIME',  's',     data.ET(I));
-                                LONGSLIP    = MeasuredParameter('LONGSLIP', '-',     data.SL(I));
-                                SLIPANGL    = MeasuredParameter('SLIPANGL', 'deg',   data.SA(I));
-                                INCLANGL    = MeasuredParameter('INCLANGL', 'deg',   data.IA(I));
-                                INFLPRES    = MeasuredParameter('INFLPRES', 'kPa',   data.P(I));
-                                FZW         = MeasuredParameter('FZW',      'N',     data.FZ(I));
-                                measurements(num).Measured = [
-                                    LONGVEL RUNTIME INFLPRES WHROTSPD LONGSLIP FX FYW FZW MXW MZW SLIPANGL INCLANGL
-                                    ];
-                                
-                                FZW = ConstantParameter('FZW',      'N',    binvalues.FZW(i1));
-                                INCLANGL = ConstantParameter('INCLANGL', 'deg',  binvalues.INCLANGL(i2));
-                                INFLPRES = ConstantParameter('INFLPRES', 'kPa',  binvalues.INFLPRES(i3));
-                                SLIPANGL = ConstantParameter('SLIPANGL', 'deg',  binvalues.SLIPANGL(i4));
-                                measurements(num).Constant = [
-                                    FZW INCLANGL INFLPRES SLIPANGL
-                                    ];
-                                
-                                FNOMIN  = ModelParameter('FNOMIN', 'N', binvalues.FZW(end));
-                                NOMPRES = ModelParameter('NOMPRES', 'kPa', binvalues.INFLPRES(end));
-                                measurements(num).ModelParameters = [
-                                    FNOMIN NOMPRES
-                                    ];
-                                
-                                RELEASE = Metadata('RELEASE','1.3');
-                                MEASID = Metadata('MEASID', fileName);
-                                SUPPLIER = Metadata('SUPPLIER','FSAE TTC');
-                                
-                                measurements(num).Metadata = [
-                                    RELEASE
-                                    MEASID
-                                    SUPPLIER
-                                    ];
-                                
-                                num = num+1;
-                            end
-                        end
-                    end
-                end
-            else
-                for i1 = 1:length(binvalues.FZW)
-                    for i2 = 1:length(binvalues.INCLANGL)
-                        for i3 = 1:length(binvalues.INFLPRES)
-                            I = bins.FZW(:,i1)       &...
-                                bins.INCLANGL(:,i2)  &...
-                                bins.INFLPRES(:,i3);
-                            noDataFound = sum(I) == 0;
-                            if noDataFound
-                                importFailed(num) = true;
-                                num = num+1;
-                                continue
-                            end
-                            
-                            LONGVEL     = MeasuredParameter('LONGVEL',  'km/h',  data.V(I));
-                            WHROTSPD    = MeasuredParameter('WHROTSPD', 'rad/s', data.N(I)*2*pi);
-                            FX          = MeasuredParameter('FX',       'N',     data.FX(I));
-                            FYW         = MeasuredParameter('FYW',      'N',     data.FY(I));
-                            MXW         = MeasuredParameter('MXW',      'Nm',    data.MX(I));
-                            MZW         = MeasuredParameter('MZW',      'Nm',    data.MZ(I));
-                            RUNTIME     = MeasuredParameter('RUNTIME',  's',     data.ET(I));
-                            LONGSLIP    = MeasuredParameter('LONGSLIP', '-',     data.SL(I));
-                            SLIPANGL    = MeasuredParameter('SLIPANGL', 'deg',   data.SA(I));
-                            INCLANGL    = MeasuredParameter('INCLANGL', 'deg',   data.IA(I));
-                            INFLPRES    = MeasuredParameter('INFLPRES', 'kPa',   data.P(I));
-                            FZW         = MeasuredParameter('FZW',      'N',     data.FZ(I));
-                            measurements(num).Measured = [
-                                LONGVEL RUNTIME WHROTSPD LONGSLIP SLIPANGL FZW INFLPRES INCLANGL FX FYW MXW MZW
-                                ];
-                            
-                            FZW =      ConstantParameter('FZW',      'N',    binvalues.FZW(i1));
-                            LONGSLIP = ConstantParameter('LONGSLIP', '-',    0);
-                            INCLANGL = ConstantParameter('INCLANGL', 'deg',  binvalues.INCLANGL(i2));
-                            INFLPRES = ConstantParameter('INFLPRES', 'kPa',  binvalues.INFLPRES(i3));
-                            measurements(num).Constant = [
-                                FZW INCLANGL INFLPRES LONGSLIP
-                                ];
-                            
-                            FNOMIN  = ModelParameter('FNOMIN', 'N', binvalues.FZW(end));
-                            NOMPRES = ModelParameter('NOMPRES', 'kPa', binvalues.INFLPRES(end));
-                            measurements(num).ModelParameters = [
-                                FNOMIN NOMPRES
-                                ];
-                            
-                            RELEASE = Metadata('RELEASE','1.3');
-                            MEASID = Metadata('MEASID', fileName);
-                            SUPPLIER = Metadata('SUPPLIER','FSAE TTC');
-                            
-                            measurements(num).Metadata = [
-                                RELEASE
-                                MEASID
-                                SUPPLIER
-                                ];
-                            
-                            num = num+1;
-                        end
-                    end
-                end
+            dataRaw = load(file);
+            [data,units,vars_SS] = preprocessInputData(obj, dataRaw);
+
+            supplier = options.Supplier;
+            measId = options.MeasurementID;
+            if isempty(measId)
+                [~,measId] = fileparts(file);
             end
-            measurements(importFailed) = [];
-            measurements = obj.fixUnits(measurements);
-            measurements = obj.fixSigns(measurements);
+
+            % Data is grouped into steady-state 'bins'. If you want to see
+            % what is happening, you can visualize the results of
+            % 'histcounts(x)' more easily with 'histogram(x)'.
+            % This strategy assumes the data contains certain steady-state
+            % levels, for example 5 different slip angles being held
+            % constant for a long time respectively. If one variable is
+            % beeing 'sweeped' (e.g. wheel is steered from left to right)
+            % this will not work. Therefore the steady-state variables have
+            % to be identified beforehand.
+            [bins, binvalues] = obj.getHistogramBins(data, vars_SS);
+
+            % Technically, all combinations between all steady-state
+            % binvalues are possible. This function generates and index
+            % array containing all those possible combinations.
+            idxCombinations = obj.getIndexCombinations(binvalues);
+
+            % For each of these combinations, we will try to find data. If
+            % no data exists, we delete this combination of steady-state
+            % values.
+            [vals_SS,units_SS,I_SS] = obj.getSteadyStateValuesAndIndices(...
+                vars_SS, data, units, bins, binvalues, idxCombinations);
+
+            % Translation of previous results into TYDEX model objects.
+            n = size(I_SS, 1);
+            measurements(n) = Measurement();
+            for i = 1:n
+                I = I_SS(i,:);
+
+                measured = obj.getMeasured(data, units, I);
+                constant = obj.getConstant(vars_SS, vals_SS(i,:), units_SS);
+                modelpar = obj.getModelPar(vars_SS, vals_SS, units_SS);
+                metadata = obj.getMetadata(measId, supplier);
+
+                measurements(i).Measured = measured;
+                measurements(i).Constant = constant;
+                measurements(i).ModelParameters = modelpar;
+                measurements(i).Metadata = metadata;
+            end
         end
     end
 end

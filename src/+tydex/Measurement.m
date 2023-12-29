@@ -93,7 +93,7 @@ classdef Measurement
             arguments
                 measurements tydex.Measurement
                 n double
-                phase double
+                phase double = 0
             end
             for num = 1:numel(measurements)
                 measurement = measurements(num);
