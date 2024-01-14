@@ -45,7 +45,7 @@ an overview of the library and is the recommended way to get started.
 
 This code generates the title figure of this README. Either clone the library or install
 it as a toolbox and try it yourself. You can download the example data
-[here](https://github.com/teasit/magic-formula-tyre-library/tree/main/doc/examples/fsae-ttc-data).
+[here](https://github.com/teasit/magic-formula-tyre-library/tree/main/doc/examples/ttc).
 The data has been de-identified to conform with the FSAE TTC's
 [license agreement](https://www.millikenresearch.com/FSAE_TTC_agreement.pdf).
 

@@ -1,3 +1,5 @@
 # Changelog
 
-- FIX: bug in import script for FSAE TTC data (prominently occured in Round 9 data)
+- NEW: FSAE TTC Parser refactored for readability and to remove
+  'Signal Processing Toolbox' as a requirement to run the parser
+- NEW: Kamm Circle plot
