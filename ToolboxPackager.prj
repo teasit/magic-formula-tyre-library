@@ -7,7 +7,7 @@
     <param.summary>MATLAB library for Magic Formula Tyre Modeling</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\doc\images\toolboximage.png</param.screenshot>
-    <param.version>2.1.0</param.version>
+    <param.version>2.2.0</param.version>
     <param.output>${PROJECT_ROOT}\MagicFormulaTyreLibrary.mltbx</param.output>
     <param.products.name>
       <item>MATLAB</item>

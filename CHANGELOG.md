@@ -1,5 +1,5 @@
 # Changelog
 
-- NEW: FSAE TTC Parser refactored for readability and to remove
-  'Signal Processing Toolbox' as a requirement to run the parser
-- NEW: Kamm Circle plot
+- NEW: Range checks (e.g. FZMIN < FZ < FZMAX)
+- small readability improvements
+- simulink library was out-of-date
