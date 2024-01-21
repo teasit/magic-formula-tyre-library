@@ -3,9 +3,10 @@ classdef (Hidden) InputParser
     methods (Static)
         function [p,SX,SA,FZ,IP,IA,VX,side,ver] = parse(p,SX,SA,varargin)
             versions = enumeration('MagicFormulaVersion');
-            isValidVersion = @(x) mustBeMember(x, versions);
-            isValidNumericVector = @(x) isnumeric(x) && isvector(x);
-            isValidTyreSide = @(x) mustBeMember(x, [0, 1]);
+            isVersion = @(x) mustBeMember(x, versions);
+            isVector = @(x) isnumeric(x) && isvector(x);
+            isTyreSide = @(x) mustBeMember(x, [0, 1]);
+            isWithinBounds = @(x,lb,ub) isVector(x) && all(x>lb & x<ub);
 
             getNonempty = @magicformula.InputParser.getNonempty;
             p    = magicformula.InputParser.parseParams(p);
@@ -17,15 +18,32 @@ classdef (Hidden) InputParser
             ver  = MagicFormulaVersion.fromFITTYP(p.FITTYP);
             ver  = getNonempty(ver,versions(1));
 
+            FZMAX = getNonempty(p.FZMAX, inf);
+            FZMIN = getNonempty(p.FZMIN, eps);
+            KPUMAX = getNonempty(p.KPUMAX, +1);
+            KPUMIN = getNonempty(p.KPUMIN, -1);
+            PRESMAX = getNonempty(p.PRESMAX, inf);
+            PRESMIN = getNonempty(p.PRESMIN, eps);
+            ALPMAX = getNonempty(p.ALPMAX, +pi);
+            ALPMIN = getNonempty(p.ALPMIN, -pi);
+            CAMMAX = getNonempty(p.CAMMAX, +pi/2);
+            CAMMIN = getNonempty(p.CAMMIN, -pi/2);
+
+            isValidFZ = @(FZ) isWithinBounds(FZ, FZMIN, FZMAX);
+            isValidIP = @(IP) isWithinBounds(IP, PRESMIN, PRESMAX);
+            isValidSX = @(SX) isWithinBounds(SX, KPUMIN, KPUMAX);
+            isValidSA = @(SA) isWithinBounds(SA, ALPMIN, ALPMAX);
+            isValidIA = @(IA) isWithinBounds(IA, CAMMIN, CAMMAX);
+
             parser = inputParser();
-            parser.addRequired('SX',isValidNumericVector);
-            parser.addRequired('SA',isValidNumericVector);
-            parser.addOptional('FZ',FZ,isValidNumericVector);
-            parser.addOptional('IP',IP,isValidNumericVector);
-            parser.addOptional('IA',IA,isValidNumericVector);
-            parser.addOptional('VX',VX,isValidNumericVector);
-            parser.addOptional('side',side,isValidTyreSide);
-            parser.addOptional('version',ver,isValidVersion);
+            parser.addRequired('SX', isValidSX);
+            parser.addRequired('SA', isValidSA);
+            parser.addOptional('FZ', FZ, isValidFZ);
+            parser.addOptional('IP', IP, isValidIP);
+            parser.addOptional('IA', IA, isValidIA);
+            parser.addOptional('VX', VX, isVector);
+            parser.addOptional('side', side, isTyreSide);
+            parser.addOptional('version', ver, isVersion);
             parser.parse(SX, SA, varargin{:});
 
             results = parser.Results;
