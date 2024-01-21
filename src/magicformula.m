@@ -50,94 +50,25 @@ function [FX,FY,MZ,MY,MX] = magicformula(params,SX,SA,varargin)
 %   See also MagicFormulaTyre, magicformula.v61.Parameters.
 %
 nargoutchk(0,5)
-[params, SX, SA, FZ, IP, IA, VX, side, version] = ...
-    parseInputs(params, SX, SA, varargin{:});
-switch version
-    case MagicFormulaVersion.v61
-        if nargout() <= 2
-            [FX,FY] = magicformula.v61.eval(params, SX, SA, FZ, IP, IA, VX, side);
-        elseif nargout() == 3
-            [FX,FY,MZ] = magicformula.v61.eval(...
-                params, SX, SA, FZ, IP, IA, VX, side);
-        elseif nargout() == 4
-            [FX,FY,MZ,MY] = magicformula.v61.eval(...
-                params, SX, SA, FZ, IP, IA, VX, side);
-        elseif nargout() == 5
-            [FX,FY,MZ,MY,MX] = magicformula.v61.eval(...
-                params, SX, SA, FZ, IP, IA, VX, side);
-        else
-            
-        end
-    otherwise
-        error('Version ''%s'' not supported yet.', char(version))
-end
-end
-
-function [params,SX,SA,FZ,IP,IA,VX,side,version] = parseInputs(...
-    params,SX,SA,varargin)
 if coder.target('MATLAB')
-    parser = magicformula.InputArgumentParser;
-    parser.parse(params,SX,SA,varargin{:})
-    
-    results = parser.Results;
-    params = results.params;
-    SX = results.SX;
-    SA = results.SA;
-    FZ = results.FZ;
-    IP = results.IP;
-    IA = results.IA;
-    VX = results.VX;
-    side = results.side;
-    version = results.version;
-    
-    if isstruct(params)
-    elseif isa(params, 'MagicFormulaTyre')
-        tyre = params;
-        params = tyre.Parameters;
-        params = struct(params);
-    elseif isa(params, 'magicformula.Parameters')
-        params = struct(params);
-    elseif isfile(params)
-        file = params;
-        tyre = MagicFormulaTyre(file);
-        params = tyre.Parameters;
-        params = struct(params);
-    end
-    
-    if isempty(FZ)
-        FZ = params.FNOMIN;
-    end
-    
-    if isempty(IP)
-        IP = params.INFLPRES;
-        if isempty(IP)
-            IP = params.NOMPRES;
-        end
-    end
-    
-    if isempty(VX)
-        VX = params.LONGVL;
-        if isempty(VX)
-            VX = params.VXLOW;
-            if isempty(VX)
-                VX = 10;
-            end
-        end
-    end
-    
-    if isempty(side)
-        side = params.TYRESIDE;
-    end
-    
-    if isempty(version)
-        FITTYP = params.FITTYP;
-        if isempty(FITTYP)
-            version = MagicFormulaVersion.v61;
-        else
-            version = MagicFormulaVersion.fromFITTYP(FITTYP);
-        end
-    end
+    [params,SX,SA,FZ,IP,IA,VX,side,version] = ...
+        magicformula.InputParser.parse(params,SX,SA,varargin{:});
 else
     [FZ,IP,IA,VX,side,version] = deal(varargin{:});
+end
+switch version
+    case MagicFormulaVersion.v61
+        f = @magicformula.v61.eval;
+        if nargout() <= 2
+            [FX,FY] = f(params,SX,SA,FZ,IP,IA,VX,side);
+        elseif nargout() == 3
+            [FX,FY,MZ] = f(params,SX,SA,FZ,IP,IA,VX,side);
+        elseif nargout() == 4
+            [FX,FY,MZ,MY] = f(params,SX,SA,FZ,IP,IA,VX,side);
+        elseif nargout() == 5
+            [FX,FY,MZ,MY,MX] = f(params,SX,SA,FZ,IP,IA,VX,side);
+        end
+    otherwise
+        error('Version ''%d'' not supported yet.', version)
 end
 end

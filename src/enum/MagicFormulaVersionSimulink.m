@@ -12,13 +12,13 @@ classdef MagicFormulaVersionSimulink < Simulink.IntEnumType
             end
             switch fittyp
                 case 5
-                    obj = MagicFormulaVersion.v51;
+                    obj = MagicFormulaVersionSimulink.v51;
                 case {6, 21}
-                    obj = MagicFormulaVersion.v52;
+                    obj = MagicFormulaVersionSimulink.v52;
                 case 60
-                    obj = MagicFormulaVersion.v60;
+                    obj = MagicFormulaVersionSimulink.v60;
                 case 61
-                    obj = MagicFormulaVersion.v61;
+                    obj = MagicFormulaVersionSimulink.v61;
                 otherwise
                     error('Invalid FITTYP value ''%d''!', fittyp)
             end
