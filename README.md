@@ -16,6 +16,10 @@
 - TIR (*.tir) import/export
 - TYDEX (*.tdx) import/export
 
+## Why is this project archived?
+
+Since the private usage agreement of my corporate MATLAB license was rescinded, I don't have the possibility anymore to make changes to this project. As I still get issues on this project, I wanted to make people aware that I am not supporting it anymore. If you want to improve this project, feel free to fork it.
+
 ## Requirements
 
 - MATLAB Base
